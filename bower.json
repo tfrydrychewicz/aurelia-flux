@@ -1,0 +1,19 @@
+{
+  "name": "aurelia-flux",
+  "version": "0.1.0",
+  "description": "A Flux dispatcher plugin for Aurelia.",
+  "keywords": [
+    "aurelia",
+    "flux",
+    "plugin"
+  ],
+  "homepage": "https://github.com/tfrydrychewicz/aurelia-flux",
+  "license": "MIT",
+  "authors": [
+    "Tomasz Frydrychewicz <tomasz.frydrychewicz@gmail.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tfrydrychewicz/aurelia-flux"
+  }
+}
