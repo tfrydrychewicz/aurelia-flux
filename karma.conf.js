@@ -1,6 +1,19 @@
 // Karma configuration
 // Generated on Fri Dec 05 2014 16:49:29 GMT-0500 (EST)
 
+var babelOptions = {
+  sourceMap: 'inline',
+  modules: 'system',
+  moduleIds: false,
+  comments: false,
+  compact: false,
+  stage:2,
+  optional: [
+    "es7.decorators",
+    "es7.classProperties"
+  ]
+};
+
 module.exports = function(config) {
   config.set({
 
@@ -34,25 +47,13 @@ module.exports = function(config) {
       'src/**/*.js': ['babel']
     },
     'babelPreprocessor': {
-      options: {
-        sourceMap: 'inline',
-        modules: 'system',
-        moduleIds: false,
-        comments: false,
-        compact: false,
-        stage:2,
-        optional: [
-          "es7.decorators",
-          "es7.classProperties"
-        ]
-      }
+      options: babelOptions
     },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: ['progress'],
-
 
     // web server port
     port: 9876,

@@ -28,6 +28,10 @@
       "aurelia-binding": "github:aurelia/binding@^0.6.1",
       "aurelia-dependency-injection": "github:aurelia/dependency-injection@^0.7.1",
       "aurelia-templating": "github:aurelia/templating@^0.11.2"
+    },
+    "devDependencies": {
+      "traceur": "github:jmcriffey/bower-traceur@0.0.88",
+      "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.88"
     }
   },
   "devDependencies": {
@@ -48,7 +52,7 @@
     "karma-jspm": "^1.1.4",
     "object.assign": "^1.0.3",
     "require-dir": "^0.1.0",
-    "run-sequence": "^1.0.2",
+    "run-sequence": "^1.1.0",
     "vinyl-paths": "^1.0.0",
     "yargs": "^2.1.1"
   },

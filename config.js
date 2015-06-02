@@ -1,4 +1,12 @@
 System.config({
+  "transpiler": "babel",
+  "babelOptions": {
+    "optional": [
+      "runtime",
+      "es7.decorators",
+      "es7.classProperties"
+    ]
+  },
   "paths": {
     "*": "*.js",
     "github:*": "jspm_packages/github/*.js",
@@ -11,8 +19,8 @@ System.config({
     "aurelia-binding": "github:aurelia/binding@0.6.1",
     "aurelia-dependency-injection": "github:aurelia/dependency-injection@0.7.1",
     "aurelia-templating": "github:aurelia/templating@0.11.2",
-    "traceur": "github:jmcriffey/bower-traceur@0.0.87",
-    "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.87",
+    "traceur": "github:jmcriffey/bower-traceur@0.0.88",
+    "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.88",
     "github:aurelia/binding@0.6.1": {
       "aurelia-dependency-injection": "github:aurelia/dependency-injection@0.7.1",
       "aurelia-metadata": "github:aurelia/metadata@0.5.0",
