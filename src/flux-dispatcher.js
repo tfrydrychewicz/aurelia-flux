@@ -5,7 +5,7 @@ export class FluxDispatcher {
 
     constructor() {
         this.instanceDispatchers = new Map();
-        this.dispatching = false;
+        this.isDispatching = false;
         this.queue = [];
         this.typesPromises = new Map();
     }
@@ -60,17 +60,18 @@ export class FluxDispatcher {
 
     $dispatch(event, payload, fromQueue) {
 
-        if(this.dispatching && fromQueue === false) {
+        if(this.isDispatching && fromQueue === false) {
             this.queue.push([event, payload]);
             return;
         }
 
-        this.dispatching = true;
+        this.isDispatching = true;
 
         this.typesPromises = new Map();
 
         this.instanceDispatchers.forEach((dispatchers, type) => {
 
+            var typePromise = this.getOrCreateTypePromises(type);
             var promises = [];
 
             dispatchers.forEach((dispatcher) => {
@@ -78,19 +79,36 @@ export class FluxDispatcher {
             });
 
             Promise.settle(promises).then(() => {
-               this.getOrCreateTypePromises(type).resolve();
+                typePromise.resolve();
             });
         });
 
-        Promise.settle(Array.from(this.typesPromises.values())).then(() => {
-            var next = this.queue.shift();
+        var allTypesPromises = Array.from(this.typesPromises.values()).map((defer) => { return defer.promise; });
+
+        Promise.settle(allTypesPromises).then(() => {
+            let next = this.queue.shift();
             setTimeout(() => {
                 if(next !== undefined) {
                     this.$dispatch(next[0], next[1], true);
                 } else {
-                    this.dispatching = false;
+                    this.isDispatching = false;
                 }
             }, 0);
+        });
+    }
+
+    waitFor(types, handler) {
+
+        if(Array.isArray(types) === false) {
+            types = [types];
+        }
+
+        var typesPromises = types.map((type) => {
+            return this.getOrCreateTypePromises(type.prototype).promise;
+        });
+
+        Promise.settle(typesPromises).then(() => {
+           handler();
         });
     }
 }

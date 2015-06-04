@@ -29,6 +29,10 @@ export class Dispatcher {
         };
     }
 
+    waitFor(types, handler) {
+        FluxDispatcher.instance.waitFor(types, handler);
+    }
+
     dispatch(event, payload) {
         FluxDispatcher.instance.dispatch(event, payload);
     }
@@ -65,9 +69,15 @@ export class DispatcherProxy {
     }
 
 
-    handle(events, handler) {
+    handle(patterns, handler) {
         this.inititalize.then(() => {
-            this.instance[Symbols.instanceDispatcher].handle(events, handler);
+            this.instance[Symbols.instanceDispatcher].handle(patterns, handler);
+        });
+    }
+
+    waitFor(types, handler) {
+        this.inititalize.then(() => {
+            this.instance[Symbols.instanceDispatcher].waitFor(types, handler);
         });
     }
 
