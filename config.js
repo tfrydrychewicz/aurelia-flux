@@ -19,6 +19,10 @@ System.config({
     "aurelia-binding": "github:aurelia/binding@0.6.1",
     "aurelia-dependency-injection": "github:aurelia/dependency-injection@0.7.1",
     "aurelia-templating": "github:aurelia/templating@0.11.2",
+    "babel": "npm:babel-core@5.4.7",
+    "babel-runtime": "npm:babel-runtime@5.4.7",
+    "bluebird": "npm:bluebird@2.9.27",
+    "core-js": "npm:core-js@0.9.13",
     "traceur": "github:jmcriffey/bower-traceur@0.0.88",
     "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.88",
     "github:aurelia/binding@0.6.1": {
@@ -52,8 +56,15 @@ System.config({
       "aurelia-task-queue": "github:aurelia/task-queue@0.4.0",
       "core-js": "npm:core-js@0.9.13"
     },
+    "github:jspm/nodelibs-events@0.1.1": {
+      "events": "npm:events@1.0.2"
+    },
     "github:jspm/nodelibs-process@0.1.1": {
       "process": "npm:process@0.10.1"
+    },
+    "npm:bluebird@2.9.27": {
+      "events": "github:jspm/nodelibs-events@0.1.1",
+      "process": "github:jspm/nodelibs-process@0.1.1"
     },
     "npm:core-js@0.9.13": {
       "fs": "github:jspm/nodelibs-fs@0.1.2",

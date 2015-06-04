@@ -1,12 +1,13 @@
-export {handle} from './flux/decorators/handle';
-export {waitFor} from './flux/decorators/waitFor';
-export {Dispatcher} from './flux/dispatcher';
+export {Dispatcher} from './instance-dispatcher';
 
-import {Dispatcher} from './flux/dispatcher';
-import {setupInterceptor} from './flux/class-activator-interceptor';
+/*
+ * Decorators
+ */
+export {handle} from './decorators/handle';
+export {waitFor} from './decorators/waitFor';
 
-setupInterceptor();
+import {LifecycleManager} from './lifecycle-manager';
 
 export function configure(aurelia, configCallback) {
-  
+    LifecycleManager.interceptClassActivator();
 }

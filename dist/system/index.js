@@ -1,27 +1,24 @@
-System.register(['./flux/dispatcher', './flux/class-activator-interceptor', './flux/decorators/handle', './flux/decorators/waitFor'], function (_export) {
+System.register(['./lifecycle-manager', './instance-dispatcher', './decorators/handle', './decorators/waitFor'], function (_export) {
   'use strict';
 
-  var Dispatcher, setupInterceptor;
+  var LifecycleManager;
 
   _export('configure', configure);
 
-  function configure(aurelia, configCallback) {}
+  function configure(aurelia, configCallback) {
+    LifecycleManager.interceptClassActivator();
+  }
 
   return {
-    setters: [function (_fluxDispatcher) {
-      Dispatcher = _fluxDispatcher.Dispatcher;
-
-      _export('Dispatcher', _fluxDispatcher.Dispatcher);
-    }, function (_fluxClassActivatorInterceptor) {
-      setupInterceptor = _fluxClassActivatorInterceptor.setupInterceptor;
-    }, function (_fluxDecoratorsHandle) {
-      _export('handle', _fluxDecoratorsHandle.handle);
-    }, function (_fluxDecoratorsWaitFor) {
-      _export('waitFor', _fluxDecoratorsWaitFor.waitFor);
+    setters: [function (_lifecycleManager) {
+      LifecycleManager = _lifecycleManager.LifecycleManager;
+    }, function (_instanceDispatcher) {
+      _export('Dispatcher', _instanceDispatcher.Dispatcher);
+    }, function (_decoratorsHandle) {
+      _export('handle', _decoratorsHandle.handle);
+    }, function (_decoratorsWaitFor) {
+      _export('waitFor', _decoratorsWaitFor.waitFor);
     }],
-    execute: function () {
-
-      setupInterceptor();
-    }
+    execute: function () {}
   };
 });
