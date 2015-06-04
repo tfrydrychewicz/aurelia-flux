@@ -17,7 +17,7 @@ export class LifecycleManager {
         } else {
             instance['deactivate'] = () => {
                 FluxDispatcher.instance.unregisterInstanceDispatcher(instance[Symbols.instanceDispatcher]);
-            }
+            };
         }
     }
 
