@@ -1,4 +1,5 @@
 import {Metadata} from '../metadata';
+
 export function waitFor(...types) {
     console.log(types);
     return function(target, method, descriptor) {

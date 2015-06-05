@@ -1,4 +1,5 @@
 import {Symbols} from './symbols';
+
 export class Metadata {
 
     static getOrCreateMetadata(target) {
