@@ -19,6 +19,7 @@
     "url": "https://github.com/tfrydrychewicz/aurelia-flux"
   },
   "scripts": {
+    "install": "./node_modules/.bin/jspm install",
     "test": "./node_modules/.bin/karma start --single-run --browsers Firefox"
   },
   "jspm": {
@@ -55,6 +56,7 @@
     "gulp-yuidoc": "^0.1.2",
     "jasmine-core": "^2.1.3",
     "jshint-stylish": "^1.0.0",
+    "jspm": "^0.15.7",
     "karma": "^0.12.28",
     "karma-babel-preprocessor": "^5.0.1",
     "karma-chrome-launcher": "^0.1.7",
