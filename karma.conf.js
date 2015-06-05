@@ -9,6 +9,7 @@ var babelOptions = {
   compact: false,
   stage:2,
   optional: [
+    "runtime",
     "es7.decorators",
     "es7.classProperties"
   ]
@@ -23,7 +24,7 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jspm', 'jasmine'],
+    frameworks: ['phantomjs-shim', 'jspm', 'jasmine'],
 
     jspm: {
       // Edit this to your needs
