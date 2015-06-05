@@ -19,7 +19,6 @@
     "url": "https://github.com/tfrydrychewicz/aurelia-flux"
   },
   "scripts": {
-    "install": "./node_modules/.bin/jspm install",
     "test": "./node_modules/.bin/karma start --single-run --browsers PhantomJS"
   },
   "jspm": {
