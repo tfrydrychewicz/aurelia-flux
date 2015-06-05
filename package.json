@@ -18,6 +18,9 @@
     "type": "git",
     "url": "https://github.com/tfrydrychewicz/aurelia-flux"
   },
+  "scripts": {
+    "test": "./node_modules/.bin/karma start --single-run"
+  },
   "jspm": {
     "main": "index",
     "format": "register",
@@ -27,6 +30,7 @@
     "dependencies": {
       "aurelia-binding": "github:aurelia/binding@^0.6.1",
       "aurelia-dependency-injection": "github:aurelia/dependency-injection@^0.7.1",
+      "aurelia-framework": "github:aurelia/framework@^0.11.0",
       "aurelia-templating": "github:aurelia/templating@^0.11.2",
       "bluebird": "npm:bluebird@^2.9.27"
     },
@@ -54,7 +58,9 @@
     "karma-chrome-launcher": "^0.1.7",
     "karma-jasmine": "^0.3.2",
     "karma-jspm": "^1.1.4",
+    "karma-phantomjs-launcher": "^0.2.0",
     "object.assign": "^1.0.3",
+    "phantomjs": "^1.9.17",
     "require-dir": "^0.1.0",
     "run-sequence": "^1.1.0",
     "vinyl-paths": "^1.0.0",
