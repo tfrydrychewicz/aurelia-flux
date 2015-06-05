@@ -64,6 +64,7 @@
     "karma-jasmine": "^0.3.2",
     "karma-jspm": "^1.1.4",
     "karma-phantomjs-launcher": "^0.2.0",
+    "karma-phantomjs-shim": "^1.0.0",
     "object.assign": "^1.0.3",
     "phantomjs": "^1.9.17",
     "require-dir": "^0.1.0",
