@@ -6,3 +6,10 @@ before_script:
   - sh -e /etc/init.d/xvfb start
   - ./node_modules/.bin/jspm config registries.github.auth $GH_TOKEN
   - ./node_modules/.bin/jspm install
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/002974bac8937a25ae85
+    on_success: always  # options: [always|never|change] default: always
+    on_failure: always  # options: [always|never|change] default: always
+    on_start: false     # default: false
