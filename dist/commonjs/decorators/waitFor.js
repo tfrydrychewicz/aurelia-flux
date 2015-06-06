@@ -10,9 +10,7 @@ function waitFor() {
         types[_key] = arguments[_key];
     }
 
-    console.log(types);
-    return function (target, method, descriptor) {
-
+    return function (target, method) {
         var metadata = _metadata.Metadata.getOrCreateMetadata(target);
 
         if (metadata.awaiters.has(method) === false) {

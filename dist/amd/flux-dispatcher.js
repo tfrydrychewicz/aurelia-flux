@@ -95,6 +95,16 @@ define(['exports', 'bluebird'], function (exports, _bluebird) {
                 });
             });
 
+            this.typesPromises.forEach(function (promise, type) {
+                if (_this.instanceDispatchers.has(type) === false) {
+
+                    var name = type !== undefined && type.constructor !== undefined && type.constructor.name !== undefined ? type.constructor.name : type.toString();
+                    console.warn('You are waiting for a type \'' + name + '\' that didn\'t handle event \'' + event + '\'. ' + name + ' promise has been resolved automatically.');
+
+                    promise.resolve();
+                }
+            });
+
             var allTypesPromises = Array.from(this.typesPromises.values()).map(function (defer) {
                 return defer.promise;
             });

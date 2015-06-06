@@ -52,20 +52,21 @@ export class Dispatcher {
 
     registerMetadata() {
         var metadata = Metadata.getOrCreateMetadata(Object.getPrototypeOf(this.instance));
-        metadata.handlers.forEach((patterns, methodName) => {
-            if(this.instance[methodName] !== undefined && typeof this.instance[methodName] === 'function') {
-                this.handlers.add(new Handler(Utils.patternsArrayToRegex(patterns), this.instance[methodName]));
-            }
-        });
 
         metadata.awaiters.forEach((types, methodName) => {
             if(this.instance[methodName] !== undefined && typeof this.instance[methodName] === 'function') {
                 var methodImpl = this.instance[methodName];
-                this.instance[methodName] = (...args) => {
+                this.instance[methodName] = () => {
                     FluxDispatcher.instance.waitFor(types, () => {
-                       methodImpl.apply(this.instance, args);
+                        methodImpl.apply(this.instance, arguments);
                     });
                 };
+            }
+        });
+
+        metadata.handlers.forEach((patterns, methodName) => {
+            if(this.instance[methodName] !== undefined && typeof this.instance[methodName] === 'function') {
+                this.handlers.add(new Handler(Utils.patternsArrayToRegex(patterns), this.instance[methodName]));
             }
         });
     }

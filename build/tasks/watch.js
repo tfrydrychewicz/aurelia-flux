@@ -9,12 +9,12 @@ function reportChange(event){
 
 
 gulp.task('copy-to-aurelia', [], function() {
-  gulp.src(paths.output + 'system/**/*.js')    
-    .pipe(gulp.dest('../aurelia/skeleton-navigation/jspm_packages/github/tfrydrychewicz/aurelia-flux@0.1.0'));
+  gulp.src(paths.output + 'commonjs/**/*.js')
+    .pipe(gulp.dest('../aurelia/skeleton-navigation/jspm_packages/github/tfrydrychewicz/aurelia-flux@master'));
 });
 
 gulp.task('watcher', function(cb) {
-  runSequence('clean','build-system','copy-to-aurelia',cb);  
+  runSequence('clean','build-commonjs','copy-to-aurelia',cb);
 });
 
 // this task wil watch for changes

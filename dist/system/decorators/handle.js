@@ -10,7 +10,7 @@ System.register(['../metadata'], function (_export) {
             patterns[_key] = arguments[_key];
         }
 
-        return function (target, method, descriptor) {
+        return function (target, method) {
 
             var metadata = Metadata.getOrCreateMetadata(target);
 

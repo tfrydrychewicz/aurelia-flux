@@ -1,9 +1,7 @@
 import {Metadata} from '../metadata';
 
 export function waitFor(...types) {
-    console.log(types);
-    return function(target, method, descriptor) {
-
+    return function (target, method) {
         var metadata = Metadata.getOrCreateMetadata(target);
 
         if(metadata.awaiters.has(method) === false) {

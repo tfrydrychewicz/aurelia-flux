@@ -69,27 +69,25 @@ var Dispatcher = (function () {
     };
 
     Dispatcher.prototype.registerMetadata = function registerMetadata() {
-        var _this3 = this;
+        var _this3 = this,
+            _arguments = arguments;
 
         var metadata = _metadata.Metadata.getOrCreateMetadata(Object.getPrototypeOf(this.instance));
-        metadata.handlers.forEach(function (patterns, methodName) {
-            if (_this3.instance[methodName] !== undefined && typeof _this3.instance[methodName] === 'function') {
-                _this3.handlers.add(new Handler(_utils.Utils.patternsArrayToRegex(patterns), _this3.instance[methodName]));
-            }
-        });
 
         metadata.awaiters.forEach(function (types, methodName) {
             if (_this3.instance[methodName] !== undefined && typeof _this3.instance[methodName] === 'function') {
                 var methodImpl = _this3.instance[methodName];
                 _this3.instance[methodName] = function () {
-                    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-                        args[_key] = arguments[_key];
-                    }
-
                     _fluxDispatcher.FluxDispatcher.instance.waitFor(types, function () {
-                        methodImpl.apply(_this3.instance, args);
+                        methodImpl.apply(_this3.instance, _arguments);
                     });
                 };
+            }
+        });
+
+        metadata.handlers.forEach(function (patterns, methodName) {
+            if (_this3.instance[methodName] !== undefined && typeof _this3.instance[methodName] === 'function') {
+                _this3.handlers.add(new Handler(_utils.Utils.patternsArrayToRegex(patterns), _this3.instance[methodName]));
             }
         });
     };
@@ -129,8 +127,8 @@ var DispatcherProxy = (function () {
     DispatcherProxy.prototype.dispatch = function dispatch(event) {
         var _this7 = this;
 
-        for (var _len2 = arguments.length, payload = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-            payload[_key2 - 1] = arguments[_key2];
+        for (var _len = arguments.length, payload = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+            payload[_key - 1] = arguments[_key];
         }
 
         this.inititalize.then(function () {

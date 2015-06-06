@@ -9,7 +9,7 @@ define(['exports', '../metadata'], function (exports, _metadata) {
             patterns[_key] = arguments[_key];
         }
 
-        return function (target, method, descriptor) {
+        return function (target, method) {
 
             var metadata = _metadata.Metadata.getOrCreateMetadata(target);
 
