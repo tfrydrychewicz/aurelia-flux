@@ -6,7 +6,7 @@ function preg_quote(str, delimiter) {
 }
 
 export class Utils {
-    static patternsArrayToRegex(patterns) {
+    static patternsToRegex(patterns) {
         if(Array.isArray(patterns) === false) {
             patterns = Array.of(patterns);
         }

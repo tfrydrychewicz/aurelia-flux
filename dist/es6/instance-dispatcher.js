@@ -21,7 +21,7 @@ export class Dispatcher {
     }
 
     handle(patterns, handlerImpl) {
-        var handler = new Handler(Utils.patternsArrayToRegex(patterns), handlerImpl)
+        var handler = new Handler(Utils.patternsToRegex(patterns), handlerImpl)
         this.handlers.add(handler);
 
         return () => {
@@ -66,7 +66,7 @@ export class Dispatcher {
 
         metadata.handlers.forEach((patterns, methodName) => {
             if(this.instance[methodName] !== undefined && typeof this.instance[methodName] === 'function') {
-                this.handlers.add(new Handler(Utils.patternsArrayToRegex(patterns), this.instance[methodName]));
+                this.handlers.add(new Handler(Utils.patternsToRegex(patterns), this.instance[methodName]));
             }
         });
     }

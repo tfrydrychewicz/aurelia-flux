@@ -20,7 +20,7 @@ export class LifecycleManager {
             };
         }
     }
-
+        
     static interceptClassActivator() {
         if(ClassActivator.instance === undefined || ClassActivator.instance.invoke === undefined) {
             throw new Error('Unsupported version of ClassActivator');

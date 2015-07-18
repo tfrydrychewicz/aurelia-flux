@@ -99,8 +99,8 @@ System.register(['bluebird'], function (_export) {
                     this.typesPromises.forEach(function (promise, type) {
                         if (_this.instanceDispatchers.has(type) === false) {
 
-                            var name = type !== undefined && type.constructor !== undefined && type.constructor.name !== undefined ? type.constructor.name : type.toString();
-                            console.warn('You are waiting for a type \'' + name + '\' that didn\'t handle event \'' + event + '\'. ' + name + ' promise has been resolved automatically.');
+                            var _name = type !== undefined && type.constructor !== undefined && type.constructor.name !== undefined ? type.constructor.name : type.toString();
+                            console.warn('You are waiting for a type \'' + _name + '\' that didn\'t handle event \'' + event + '\'. ' + _name + ' promise has been resolved automatically.');
 
                             promise.resolve();
                         }

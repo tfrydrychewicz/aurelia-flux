@@ -29,7 +29,7 @@ define(['exports', './metadata', './utils', './flux-dispatcher', 'bluebird', './
         Dispatcher.prototype.handle = function handle(patterns, handlerImpl) {
             var _this = this;
 
-            var handler = new Handler(_utils.Utils.patternsArrayToRegex(patterns), handlerImpl);
+            var handler = new Handler(_utils.Utils.patternsToRegex(patterns), handlerImpl);
             this.handlers.add(handler);
 
             return function () {
@@ -78,7 +78,7 @@ define(['exports', './metadata', './utils', './flux-dispatcher', 'bluebird', './
 
             metadata.handlers.forEach(function (patterns, methodName) {
                 if (_this3.instance[methodName] !== undefined && typeof _this3.instance[methodName] === 'function') {
-                    _this3.handlers.add(new Handler(_utils.Utils.patternsArrayToRegex(patterns), _this3.instance[methodName]));
+                    _this3.handlers.add(new Handler(_utils.Utils.patternsToRegex(patterns), _this3.instance[methodName]));
                 }
             });
         };

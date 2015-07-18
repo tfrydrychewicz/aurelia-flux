@@ -41,7 +41,7 @@ export class FluxDispatcher {
             return;
         }
 
-        var type = Object.getPrototypeOf(dispatcher.instance);
+        let type = Object.getPrototypeOf(dispatcher.instance);
 
         if(this.instanceDispatchers.has(type) === false) {
             return;
@@ -87,7 +87,7 @@ export class FluxDispatcher {
         this.typesPromises.forEach((promise, type) => {
             if(this.instanceDispatchers.has(type) === false) {
 
-                var name = (type !== undefined && type.constructor !== undefined && type.constructor.name !== undefined) ? type.constructor.name : type.toString();
+                let name = (type !== undefined && type.constructor !== undefined && type.constructor.name !== undefined) ? type.constructor.name : type.toString();
                 console.warn(`You are waiting for a type '${name}' that didn't handle event '${event}'. ${name} promise has been resolved automatically.`);
 
                 promise.resolve();
@@ -113,7 +113,7 @@ export class FluxDispatcher {
             types = [types];
         }
 
-        var typesPromises = types.map((type) => {
+        let typesPromises = types.map((type) => {
             return this.getOrCreateTypePromises(type.prototype).promise;
         });
 

@@ -16,7 +16,7 @@ var Utils = (function () {
         _classCallCheck(this, Utils);
     }
 
-    Utils.patternsArrayToRegex = function patternsArrayToRegex(patterns) {
+    Utils.patternsToRegex = function patternsToRegex(patterns) {
         if (Array.isArray(patterns) === false) {
             patterns = Array.of(patterns);
         }
