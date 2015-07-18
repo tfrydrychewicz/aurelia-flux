@@ -28,18 +28,16 @@
       "lib": "dist/system"
     },
     "dependencies": {
-      "aurelia-binding": "github:aurelia/binding@^0.6.1",
-      "aurelia-dependency-injection": "github:aurelia/dependency-injection@^0.7.1",
-      "aurelia-framework": "github:aurelia/framework@^0.11.0",
-      "aurelia-templating": "github:aurelia/templating@^0.11.2",
-      "bluebird": "npm:bluebird@^2.9.27"
+      "aurelia-binding": "github:aurelia/binding@^0.8.2",
+      "aurelia-dependency-injection": "github:aurelia/dependency-injection@^0.9.0",
+      "aurelia-framework": "github:aurelia/framework@^0.13.3",
+      "bluebird": "npm:bluebird@^2.9.27",
+      "core-js": "npm:core-js@^0.9.18"
     },
     "devDependencies": {
       "babel": "npm:babel-core@^5.1.13",
       "babel-runtime": "npm:babel-runtime@^5.1.13",
-      "core-js": "npm:core-js@^0.9.4",
-      "traceur": "github:jmcriffey/bower-traceur@0.0.88",
-      "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.88"
+      "core-js": "npm:core-js@^0.9.18"
     }
   },
   "devDependencies": {
