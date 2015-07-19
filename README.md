@@ -18,8 +18,13 @@ class MessagesStore {
 
 	@handle('message.submit')
 	collect(event, message) {
-		this.messages.push(message);
-		this.dispatcher.dispatch('message.submitted', message);
+		return new Promise((resolve) => {
+			setTimeout(() => {
+				this.messages.push(message);				
+				this.dispatcher.dispatch('message.submitted', message);
+				resolve();
+			}, 1000);
+		});
 	}
 	
 	getMessages() {
@@ -38,7 +43,7 @@ export class Welcome {
 		
 		this.dispatcher.handle('message.submitted', (event, message) => {
 			alert(message);
-		})
+		});
 	}
 
 	submit() {
@@ -51,8 +56,6 @@ export class Welcome {
 		console.log(event, message);
 	}
 }
-
-
 ```
 
 ## Dependencies
