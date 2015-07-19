@@ -4,6 +4,43 @@
 
 A Flux plugin for [Aurelia](http://www.aurelia.io/).
 
+``` javascript
+import {inject} from 'aurelia-framework';
+import {Dispatcher, handle} from 'aurelia-flux';
+
+@inject(Dispatcher)
+export class Welcome{
+  
+  constructor(dispatcher) {
+    this.dispatcher = dispatcher;
+  }
+
+  get fullName(){
+    return `${this.firstName} ${this.lastName}`;
+  }
+
+  submit(){
+    this.previousValue = this.fullName;    
+    this.dispatcher.dispatch('submit', `Welcome, ${this.fullName}!`);
+  }
+  
+  @handle('submit')
+  submitHandler(event, message) {
+    alert(message);
+  }
+  
+  @handle('submit')
+  anotherSubmitHandler(event, message) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        console.log(message);
+        resolve();
+      }, 1000);
+    });
+  }
+}
+```
+
 ## Dependencies
 
 * [aurelia-dependency-injection](https://github.com/aurelia/dependency-injection)
