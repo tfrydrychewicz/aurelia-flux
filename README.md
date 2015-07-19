@@ -10,30 +10,27 @@ import {Dispatcher, handle} from 'aurelia-flux';
 
 @inject(Dispatcher)
 export class Welcome{
-  
   constructor(dispatcher) {
     this.dispatcher = dispatcher;
+    
+    this.dispatcher.handle('welcome.submit', (event, message) => {
+      alert(message);
+    });
   }
 
   get fullName(){
     return `${this.firstName} ${this.lastName}`;
   }
 
-  submit(){
-    this.previousValue = this.fullName;    
-    this.dispatcher.dispatch('submit', `Welcome, ${this.fullName}!`);
+  submit(){    
+    this.dispatcher.dispatch('welcome.submit', `Welcome, ${this.fullName}!`);
   }
-  
-  @handle('submit')
-  submitHandler(event, message) {
-    alert(message);
-  }
-  
-  @handle('submit')
-  anotherSubmitHandler(event, message) {
+    
+  @handle('welcome.*')
+  log(event, ...payroll) {
     return new Promise((resolve) => {
       setTimeout(() => {
-        console.log(message);
+        console.log(event, payroll);
         resolve();
       }, 1000);
     });
