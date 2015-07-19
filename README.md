@@ -13,11 +13,7 @@ class MessagesStore {
 	messages = [];
 
 	constructor(dispatcher) {
-		this.dispatcher = dispatcher;
-		
-		this.dispatcher.handle('message.submitted', (event, message) => {
-			alert(message);
-		})
+		this.dispatcher = dispatcher;				
 	}
 
 	@handle('message.submit')
@@ -39,6 +35,10 @@ export class Welcome {
 	constructor(dispatcher, store) {
 		this.dispatcher = dispatcher;
 		this.store = store;
+		
+		this.dispatcher.handle('message.submitted', (event, message) => {
+			alert(message);
+		})
 	}
 
 	submit() {
@@ -51,6 +51,8 @@ export class Welcome {
 		console.log(event, message);
 	}
 }
+
+
 ```
 
 ## Dependencies
