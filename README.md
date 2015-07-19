@@ -2,39 +2,54 @@
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tfrydrychewicz/aurelia-flux?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) 
 [![Travis CI](https://travis-ci.org/tfrydrychewicz/aurelia-flux.svg)](https://travis-ci.org/tfrydrychewicz/aurelia-flux)
 
-A Flux plugin for [Aurelia](http://www.aurelia.io/).
+A Flux plugin for [Aurelia](http://www.aurelia.io/) that supports Promises.
 
 ``` javascript
 import {inject} from 'aurelia-framework';
-import {Dispatcher, handle} from 'aurelia-flux';
+import {Dispatcher, handle, waitFor} from 'aurelia-flux';
 
 @inject(Dispatcher)
-export class Welcome{
-  constructor(dispatcher) {
-    this.dispatcher = dispatcher;
-    
-    this.dispatcher.handle('welcome.submit', (event, message) => {
-      alert(message);
-    });
-  }
+class MessagesStore {
+	messages = [];
 
-  get fullName(){
-    return `${this.firstName} ${this.lastName}`;
-  }
+	constructor(dispatcher) {
+		this.dispatcher = dispatcher;
+		
+		this.dispatcher.handle('message.submitted', (event, message) => {
+			alert(message);
+		})
+	}
 
-  submit(){    
-    this.dispatcher.dispatch('welcome.submit', `Welcome, ${this.fullName}!`);
-  }
-    
-  @handle('welcome.*')
-  log(event, ...payroll) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        console.log(event, payroll);
-        resolve();
-      }, 1000);
-    });
-  }
+	@handle('message.submit')
+	collect(event, message) {
+		this.messages.push(message);
+		this.dispatcher.dispatch('message.submitted', message);
+	}
+	
+	getMessages() {
+		return this.messages;
+	}
+}
+
+@inject(Dispatcher, MessagesStore)
+export class Welcome {
+
+	message = "Hello Aurelia!";
+
+	constructor(dispatcher, store) {
+		this.dispatcher = dispatcher;
+		this.store = store;
+	}
+
+	submit() {
+		this.dispatcher.dispatch('message.submit', this.message);
+	}
+			
+	@handle('message.*')
+	@waitFor(MessagesStore)
+	logMessage(event, message) {
+		console.log(event, message);
+	}
 }
 ```
 
