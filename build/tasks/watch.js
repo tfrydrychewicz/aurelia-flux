@@ -10,7 +10,7 @@ function reportChange(event){
 
 gulp.task('copy-to-aurelia', [], function() {
   gulp.src(paths.output + 'commonjs/**/*.js')
-    .pipe(gulp.dest('../aurelia/skeleton-navigation/jspm_packages/github/tfrydrychewicz/aurelia-flux@master'));
+    .pipe(gulp.dest('../../Code/t1/jspm_packages/github/tfrydrychewicz/aurelia-flux@master'));
 });
 
 gulp.task('watcher', function(cb) {
