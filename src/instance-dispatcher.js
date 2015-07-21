@@ -53,12 +53,12 @@ export class Dispatcher {
     registerMetadata() {
         var metadata = Metadata.getOrCreateMetadata(Object.getPrototypeOf(this.instance));
 
-        metadata.awaiters.forEach((types, methodName) => {
+        metadata.awaiters.forEach((types, methodName) => {            
             if(this.instance[methodName] !== undefined && typeof this.instance[methodName] === 'function') {
                 var methodImpl = this.instance[methodName];
-                this.instance[methodName] = () => {
+                this.instance[methodName] = (...args) => {                    
                     FluxDispatcher.instance.waitFor(types, () => {
-                        methodImpl.apply(this.instance, arguments);
+                        methodImpl.apply(this.instance, args);
                     });
                 };
             }
