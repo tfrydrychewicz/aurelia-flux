@@ -82,7 +82,6 @@ define(['exports', 'bluebird'], function (exports, _bluebird) {
             this.typesPromises = new Map();
 
             this.instanceDispatchers.forEach(function (dispatchers, type) {
-
                 var typePromise = _this.getOrCreateTypePromises(type);
                 var promises = [];
 
@@ -132,9 +131,17 @@ define(['exports', 'bluebird'], function (exports, _bluebird) {
                 return _this2.getOrCreateTypePromises(type.prototype).promise;
             });
 
+            var def = _Promise['default'].defer();
+
             _Promise['default'].settle(typesPromises).then(function () {
-                handler();
+                _Promise['default'].resolve(handler()).then(function (ret) {
+                    def.resolve(ret);
+                })['catch'](function (err) {
+                    def.reject(err);
+                });
             });
+
+            return def.promise;
         };
 
         _createClass(FluxDispatcher, null, [{

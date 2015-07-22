@@ -81,7 +81,7 @@ var Dispatcher = (function () {
                         args[_key] = arguments[_key];
                     }
 
-                    _fluxDispatcher.FluxDispatcher.instance.waitFor(types, function () {
+                    return _fluxDispatcher.FluxDispatcher.instance.waitFor(types, function () {
                         methodImpl.apply(_this3.instance, args);
                     });
                 };

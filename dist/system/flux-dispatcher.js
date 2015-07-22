@@ -83,7 +83,6 @@ System.register(['bluebird'], function (_export) {
                     this.typesPromises = new Map();
 
                     this.instanceDispatchers.forEach(function (dispatchers, type) {
-
                         var typePromise = _this.getOrCreateTypePromises(type);
                         var promises = [];
 
@@ -133,9 +132,17 @@ System.register(['bluebird'], function (_export) {
                         return _this2.getOrCreateTypePromises(type.prototype).promise;
                     });
 
+                    var def = Promise.defer();
+
                     Promise.settle(typesPromises).then(function () {
-                        handler();
+                        Promise.resolve(handler()).then(function (ret) {
+                            def.resolve(ret);
+                        })['catch'](function (err) {
+                            def.reject(err);
+                        });
                     });
+
+                    return def.promise;
                 };
 
                 _createClass(FluxDispatcher, null, [{

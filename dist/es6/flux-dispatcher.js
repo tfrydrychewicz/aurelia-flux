@@ -70,7 +70,6 @@ export class FluxDispatcher {
         this.typesPromises = new Map();
 
         this.instanceDispatchers.forEach((dispatchers, type) => {
-
             var typePromise = this.getOrCreateTypePromises(type);
             var promises = [];
 
@@ -117,8 +116,16 @@ export class FluxDispatcher {
             return this.getOrCreateTypePromises(type.prototype).promise;
         });
 
+        var def = Promise.defer();
+
         Promise.settle(typesPromises).then(() => {
-           handler();
+           Promise.resolve(handler()).then((ret) => {
+             def.resolve(ret);
+           }).catch((err) => {
+             def.reject(err);
+           });
         });
+
+        return def.promise;
     }
 }

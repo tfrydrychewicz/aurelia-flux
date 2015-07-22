@@ -83,7 +83,6 @@ var FluxDispatcher = (function () {
         this.typesPromises = new Map();
 
         this.instanceDispatchers.forEach(function (dispatchers, type) {
-
             var typePromise = _this.getOrCreateTypePromises(type);
             var promises = [];
 
@@ -133,9 +132,17 @@ var FluxDispatcher = (function () {
             return _this2.getOrCreateTypePromises(type.prototype).promise;
         });
 
+        var def = _bluebird2['default'].defer();
+
         _bluebird2['default'].settle(typesPromises).then(function () {
-            handler();
+            _bluebird2['default'].resolve(handler()).then(function (ret) {
+                def.resolve(ret);
+            })['catch'](function (err) {
+                def.reject(err);
+            });
         });
+
+        return def.promise;
     };
 
     _createClass(FluxDispatcher, null, [{

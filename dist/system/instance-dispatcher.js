@@ -81,7 +81,7 @@ System.register(['./metadata', './utils', './flux-dispatcher', 'bluebird', './sy
                                     args[_key] = arguments[_key];
                                 }
 
-                                FluxDispatcher.instance.waitFor(types, function () {
+                                return FluxDispatcher.instance.waitFor(types, function () {
                                     methodImpl.apply(_this3.instance, args);
                                 });
                             };
