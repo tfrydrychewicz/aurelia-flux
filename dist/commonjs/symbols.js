@@ -19,6 +19,10 @@ var Symbols = (function () {
         key: 'metadata',
         value: Symbol('fluxMetadata'),
         enumerable: true
+    }, {
+        key: 'deactivators',
+        value: Symbol('fluxDeactivators'),
+        enumerable: true
     }]);
 
     return Symbols;

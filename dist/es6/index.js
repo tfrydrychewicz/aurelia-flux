@@ -10,4 +10,5 @@ import {LifecycleManager} from './lifecycle-manager';
 
 export function configure(aurelia, configCallback) {
     LifecycleManager.interceptClassActivator();
+    LifecycleManager.interceptHtmlBehaviorResource();
 }

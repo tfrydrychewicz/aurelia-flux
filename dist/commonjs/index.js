@@ -19,4 +19,5 @@ exports.waitFor = _decoratorsWaitFor.waitFor;
 
 function configure(aurelia, configCallback) {
   _lifecycleManager.LifecycleManager.interceptClassActivator();
+  _lifecycleManager.LifecycleManager.interceptHtmlBehaviorResource();
 }

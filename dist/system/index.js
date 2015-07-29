@@ -7,6 +7,7 @@ System.register(['./lifecycle-manager', './instance-dispatcher', './decorators/h
 
   function configure(aurelia, configCallback) {
     LifecycleManager.interceptClassActivator();
+    LifecycleManager.interceptHtmlBehaviorResource();
   }
 
   return {

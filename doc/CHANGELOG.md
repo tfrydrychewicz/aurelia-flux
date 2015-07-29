@@ -1,3 +1,11 @@
+### 0.1.4 (2015-07-29)
+
+
+#### Features
+
+* **lifecycle-manager:** Added support for component detaching ([913f2160](https://github.com/tfrydrychewicz/aurelia-flux/commit/913f2160286e989d27947a1cc50be5d1ad84af95), closes [#2](https://github.com/tfrydrychewicz/aurelia-flux/issues/2))
+
+
 ### 0.1.3 (2015-07-22)
 
 

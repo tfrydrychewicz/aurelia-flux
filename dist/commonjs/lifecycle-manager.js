@@ -6,7 +6,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var _aureliaFramework = require('aurelia-framework');
+var _aureliaDependencyInjection = require('aurelia-dependency-injection');
+
+var _aureliaTemplating = require('aurelia-templating');
 
 var _instanceDispatcher = require('./instance-dispatcher');
 
@@ -26,32 +28,64 @@ var LifecycleManager = (function () {
     }
 
     LifecycleManager.interceptInstanceDeactivator = function interceptInstanceDeactivator(instance) {
-        if ('deactivate' in instance && instance[_symbols.Symbols.instanceDispatcher] !== undefined) {
-            var deactivateImpl = instance['deactivate'];
-            instance['deactivate'] = function () {
-                for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-                    args[_key] = arguments[_key];
-                }
-
-                _fluxDispatcher.FluxDispatcher.instance.unregisterInstanceDispatcher(instance[_symbols.Symbols.instanceDispatcher]);
-                deactivateImpl.apply(instance, args);
-            };
-        } else {
-            instance['deactivate'] = function () {
-                _fluxDispatcher.FluxDispatcher.instance.unregisterInstanceDispatcher(instance[_symbols.Symbols.instanceDispatcher]);
-            };
+        if (instance[_symbols.Symbols.deactivators] === true) {
+            return;
         }
+
+        var _arr = ['deactivate', 'detached'];
+        for (var _i = 0; _i < _arr.length; _i++) {
+            var deactivator = _arr[_i];
+            if (deactivator in instance && instance[_symbols.Symbols.instanceDispatcher] !== undefined) {
+                var deactivateImpl = instance[deactivator];
+                instance[deactivator] = function () {
+                    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                        args[_key] = arguments[_key];
+                    }
+
+                    _fluxDispatcher.FluxDispatcher.instance.unregisterInstanceDispatcher(instance[_symbols.Symbols.instanceDispatcher]);
+                    deactivateImpl.apply(instance, args);
+                };
+            } else {
+                instance[deactivator] = function () {
+                    _fluxDispatcher.FluxDispatcher.instance.unregisterInstanceDispatcher(instance[_symbols.Symbols.instanceDispatcher]);
+                };
+            }
+        }
+
+        instance[_symbols.Symbols.deactivators] = true;
     };
 
-    LifecycleManager.interceptClassActivator = function interceptClassActivator() {
-        if (_aureliaFramework.ClassActivator.instance === undefined || _aureliaFramework.ClassActivator.instance.invoke === undefined) {
+    LifecycleManager.interceptHtmlBehaviorResource = function interceptHtmlBehaviorResource() {
+        if (_aureliaTemplating.HtmlBehaviorResource === undefined || typeof _aureliaTemplating.HtmlBehaviorResource.prototype.analyze !== 'function') {
             throw new Error('Unsupported version of ClassActivator');
         }
 
-        var invokeImpl = _aureliaFramework.ClassActivator.instance.invoke;
-        _aureliaFramework.ClassActivator.instance.invoke = function () {
-            for (var _len2 = arguments.length, invokeArgs = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-                invokeArgs[_key2] = arguments[_key2];
+        var analyzeImpl = _aureliaTemplating.HtmlBehaviorResource.prototype.analyze;
+
+        _aureliaTemplating.HtmlBehaviorResource.prototype.analyze = function () {
+            for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                args[_key2] = arguments[_key2];
+            }
+
+            var target = args[1];
+            if (target && target.prototype && target.prototype[_symbols.Symbols.metadata] && target.prototype[_symbols.Symbols.metadata].handlers && target.prototype[_symbols.Symbols.metadata].handlers.size) {
+                if (target.prototype.detached === undefined) {
+                    target.prototype.detached = function () {};
+                }
+            }
+            return analyzeImpl.apply(this, args);
+        };
+    };
+
+    LifecycleManager.interceptClassActivator = function interceptClassActivator() {
+        if (_aureliaDependencyInjection.ClassActivator.instance === undefined || _aureliaDependencyInjection.ClassActivator.instance.invoke === undefined) {
+            throw new Error('Unsupported version of ClassActivator');
+        }
+
+        var invokeImpl = _aureliaDependencyInjection.ClassActivator.instance.invoke;
+        _aureliaDependencyInjection.ClassActivator.instance.invoke = function () {
+            for (var _len3 = arguments.length, invokeArgs = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+                invokeArgs[_key3] = arguments[_key3];
             }
 
             var type = invokeArgs[0];

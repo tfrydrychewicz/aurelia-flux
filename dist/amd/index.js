@@ -9,5 +9,6 @@ define(['exports', './lifecycle-manager', './instance-dispatcher', './decorators
 
   function configure(aurelia, configCallback) {
     _lifecycleManager.LifecycleManager.interceptClassActivator();
+    _lifecycleManager.LifecycleManager.interceptHtmlBehaviorResource();
   }
 });

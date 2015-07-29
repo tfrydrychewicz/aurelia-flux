@@ -1,13 +1,15 @@
-System.register(['aurelia-framework', './instance-dispatcher', './flux-dispatcher', './metadata', './symbols', 'bluebird'], function (_export) {
+System.register(['aurelia-dependency-injection', 'aurelia-templating', './instance-dispatcher', './flux-dispatcher', './metadata', './symbols', 'bluebird'], function (_export) {
     'use strict';
 
-    var ClassActivator, Dispatcher, DispatcherProxy, FluxDispatcher, Metadata, Symbols, Promise, LifecycleManager;
+    var ClassActivator, HtmlBehaviorResource, Dispatcher, DispatcherProxy, FluxDispatcher, Metadata, Symbols, Promise, LifecycleManager;
 
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
     return {
-        setters: [function (_aureliaFramework) {
-            ClassActivator = _aureliaFramework.ClassActivator;
+        setters: [function (_aureliaDependencyInjection) {
+            ClassActivator = _aureliaDependencyInjection.ClassActivator;
+        }, function (_aureliaTemplating) {
+            HtmlBehaviorResource = _aureliaTemplating.HtmlBehaviorResource;
         }, function (_instanceDispatcher) {
             Dispatcher = _instanceDispatcher.Dispatcher;
             DispatcherProxy = _instanceDispatcher.DispatcherProxy;
@@ -27,21 +29,53 @@ System.register(['aurelia-framework', './instance-dispatcher', './flux-dispatche
                 }
 
                 LifecycleManager.interceptInstanceDeactivator = function interceptInstanceDeactivator(instance) {
-                    if ('deactivate' in instance && instance[Symbols.instanceDispatcher] !== undefined) {
-                        var deactivateImpl = instance['deactivate'];
-                        instance['deactivate'] = function () {
-                            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-                                args[_key] = arguments[_key];
-                            }
-
-                            FluxDispatcher.instance.unregisterInstanceDispatcher(instance[Symbols.instanceDispatcher]);
-                            deactivateImpl.apply(instance, args);
-                        };
-                    } else {
-                        instance['deactivate'] = function () {
-                            FluxDispatcher.instance.unregisterInstanceDispatcher(instance[Symbols.instanceDispatcher]);
-                        };
+                    if (instance[Symbols.deactivators] === true) {
+                        return;
                     }
+
+                    var _arr = ['deactivate', 'detached'];
+                    for (var _i = 0; _i < _arr.length; _i++) {
+                        var deactivator = _arr[_i];
+                        if (deactivator in instance && instance[Symbols.instanceDispatcher] !== undefined) {
+                            var deactivateImpl = instance[deactivator];
+                            instance[deactivator] = function () {
+                                for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                                    args[_key] = arguments[_key];
+                                }
+
+                                FluxDispatcher.instance.unregisterInstanceDispatcher(instance[Symbols.instanceDispatcher]);
+                                deactivateImpl.apply(instance, args);
+                            };
+                        } else {
+                            instance[deactivator] = function () {
+                                FluxDispatcher.instance.unregisterInstanceDispatcher(instance[Symbols.instanceDispatcher]);
+                            };
+                        }
+                    }
+
+                    instance[Symbols.deactivators] = true;
+                };
+
+                LifecycleManager.interceptHtmlBehaviorResource = function interceptHtmlBehaviorResource() {
+                    if (HtmlBehaviorResource === undefined || typeof HtmlBehaviorResource.prototype.analyze !== 'function') {
+                        throw new Error('Unsupported version of ClassActivator');
+                    }
+
+                    var analyzeImpl = HtmlBehaviorResource.prototype.analyze;
+
+                    HtmlBehaviorResource.prototype.analyze = function () {
+                        for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                            args[_key2] = arguments[_key2];
+                        }
+
+                        var target = args[1];
+                        if (target && target.prototype && target.prototype[Symbols.metadata] && target.prototype[Symbols.metadata].handlers && target.prototype[Symbols.metadata].handlers.size) {
+                            if (target.prototype.detached === undefined) {
+                                target.prototype.detached = function () {};
+                            }
+                        }
+                        return analyzeImpl.apply(this, args);
+                    };
                 };
 
                 LifecycleManager.interceptClassActivator = function interceptClassActivator() {
@@ -51,8 +85,8 @@ System.register(['aurelia-framework', './instance-dispatcher', './flux-dispatche
 
                     var invokeImpl = ClassActivator.instance.invoke;
                     ClassActivator.instance.invoke = function () {
-                        for (var _len2 = arguments.length, invokeArgs = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-                            invokeArgs[_key2] = arguments[_key2];
+                        for (var _len3 = arguments.length, invokeArgs = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+                            invokeArgs[_key3] = arguments[_key3];
                         }
 
                         var type = invokeArgs[0];
