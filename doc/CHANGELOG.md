@@ -1,5 +1,7 @@
 ### 0.1.5 (2015-07-31)
 
+#### Features
+
 * **activation-strategy:** Add support for invoke-lifecycle activation strategy ([e6f08d0d](https://github.com/tfrydrychewicz/aurelia-flux/commit/e6f08d0d3bea03db46ba0acf3b402f418c043e9c), closes [#6](https://github.com/tfrydrychewicz/aurelia-flux/issues/6))
 
 ### 0.1.4 (2015-07-29)
