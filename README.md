@@ -13,20 +13,20 @@ class MessagesStore {
 	messages = [];
 
 	constructor(dispatcher) {
-		this.dispatcher = dispatcher;				
+		this.dispatcher = dispatcher;
 	}
 
 	@handle('message.submit')
-	collect(event, message) {
+	collect(action, message) {
 		return new Promise((resolve) => {
 			setTimeout(() => {
-				this.messages.push(message);				
+				this.messages.push(message);
 				this.dispatcher.dispatch('message.submitted', message);
 				resolve();
 			}, 1000);
 		});
 	}
-	
+
 	getMessages() {
 		return this.messages;
 	}
@@ -40,8 +40,8 @@ export class Welcome {
 	constructor(dispatcher, store) {
 		this.dispatcher = dispatcher;
 		this.store = store;
-		
-		this.dispatcher.handle('message.submitted', (event, message) => {
+
+		this.dispatcher.handle('message.submitted', (action, message) => {
 			alert(message);
 		});
 	}
@@ -49,10 +49,10 @@ export class Welcome {
 	submit() {
 		this.dispatcher.dispatch('message.submit', this.message);
 	}
-			
+
 	@handle('message.*')
 	@waitFor(MessagesStore)
-	logMessage(event, message) {
+	logMessage(action, message) {
 		console.log(event, message);
 	}
 }
@@ -60,9 +60,10 @@ export class Welcome {
 
 ## Dependencies
 
-* [aurelia-dependency-injection](https://github.com/aurelia/dependency-injection)
 * [aurelia-binding](https://github.com/aurelia/binding)
-* [aurelia-framework](https://github.com/aurelia/framework)
+* [aurelia-dependency-injection](https://github.com/aurelia/dependency-injection)
+* [aurelia-router](https://github.com/aurelia/router)
+* [aurelia-templating](https://github.com/aurelia/templating)
 
 ## Used By
 
