@@ -22,49 +22,77 @@ var _bluebird = require('bluebird');
 
 var _bluebird2 = _interopRequireDefault(_bluebird);
 
+var _aureliaRouter = require('aurelia-router');
+
 var LifecycleManager = (function () {
     function LifecycleManager() {
         _classCallCheck(this, LifecycleManager);
     }
 
-    LifecycleManager.interceptInstanceDeactivator = function interceptInstanceDeactivator(instance) {
+    LifecycleManager.interceptInstanceDeactivators = function interceptInstanceDeactivators(instance) {
         if (instance[_symbols.Symbols.deactivators] === true) {
             return;
         }
 
-        var _arr = ['deactivate', 'detached'];
-        for (var _i = 0; _i < _arr.length; _i++) {
-            var deactivator = _arr[_i];
-            if (deactivator in instance && instance[_symbols.Symbols.instanceDispatcher] !== undefined) {
-                var deactivateImpl = instance[deactivator];
-                instance[deactivator] = function () {
-                    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-                        args[_key] = arguments[_key];
-                    }
-
-                    _fluxDispatcher.FluxDispatcher.instance.unregisterInstanceDispatcher(instance[_symbols.Symbols.instanceDispatcher]);
-                    deactivateImpl.apply(instance, args);
-                };
-            } else {
-                instance[deactivator] = function () {
-                    _fluxDispatcher.FluxDispatcher.instance.unregisterInstanceDispatcher(instance[_symbols.Symbols.instanceDispatcher]);
-                };
-            }
-        }
+        LifecycleManager.interceptInstanceDeactivate(instance);
+        LifecycleManager.interceptInstanceDetached(instance);
 
         instance[_symbols.Symbols.deactivators] = true;
     };
 
+    LifecycleManager.interceptInstanceDeactivate = function interceptInstanceDeactivate(instance) {
+
+        function _unregister() {
+            if (_fluxDispatcher.FluxDispatcher.instance.strategy !== _aureliaRouter.activationStrategy.invokeLifecycle) {
+                _fluxDispatcher.FluxDispatcher.instance.unregisterInstanceDispatcher(instance[_symbols.Symbols.instanceDispatcher]);
+            }
+        }
+
+        if (instance.deactivate !== undefined && instance[_symbols.Symbols.instanceDispatcher] !== undefined) {
+            var deactivateImpl = instance.deactivate;
+            instance.deactivate = function () {
+                for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+                    args[_key] = arguments[_key];
+                }
+
+                _unregister();
+                deactivateImpl.apply(instance, args);
+            };
+        } else {
+            instance.deactivate = function () {
+                _unregister();
+            };
+        }
+    };
+
+    LifecycleManager.interceptInstanceDetached = function interceptInstanceDetached(instance) {
+        if (instance.detached !== undefined && instance[_symbols.Symbols.instanceDispatcher] !== undefined) {
+            var deactivateImpl = instance.detached;
+            instance.detached = function () {
+                for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                    args[_key2] = arguments[_key2];
+                }
+
+                _fluxDispatcher.FluxDispatcher.instance.unregisterInstanceDispatcher(instance[_symbols.Symbols.instanceDispatcher]);
+                deactivateImpl.apply(instance, args);
+            };
+        } else {
+            instance.detached = function () {
+                _fluxDispatcher.FluxDispatcher.instance.unregisterInstanceDispatcher(instance[_symbols.Symbols.instanceDispatcher]);
+            };
+        }
+    };
+
     LifecycleManager.interceptHtmlBehaviorResource = function interceptHtmlBehaviorResource() {
         if (_aureliaTemplating.HtmlBehaviorResource === undefined || typeof _aureliaTemplating.HtmlBehaviorResource.prototype.analyze !== 'function') {
-            throw new Error('Unsupported version of ClassActivator');
+            throw new Error('Unsupported version of HtmlBehaviorResource');
         }
 
         var analyzeImpl = _aureliaTemplating.HtmlBehaviorResource.prototype.analyze;
 
         _aureliaTemplating.HtmlBehaviorResource.prototype.analyze = function () {
-            for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-                args[_key2] = arguments[_key2];
+            for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+                args[_key3] = arguments[_key3];
             }
 
             var target = args[1];
@@ -84,8 +112,8 @@ var LifecycleManager = (function () {
 
         var invokeImpl = _aureliaDependencyInjection.ClassActivator.instance.invoke;
         _aureliaDependencyInjection.ClassActivator.instance.invoke = function () {
-            for (var _len3 = arguments.length, invokeArgs = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-                invokeArgs[_key3] = arguments[_key3];
+            for (var _len4 = arguments.length, invokeArgs = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+                invokeArgs[_key4] = arguments[_key4];
             }
 
             var type = invokeArgs[0];
@@ -110,7 +138,7 @@ var LifecycleManager = (function () {
             }
 
             if (_metadata.Metadata.exists(Object.getPrototypeOf(instance))) {
-                if (instance[_symbols.Symbols.instanceDispatcher] === undefined || instance[_symbols.Symbols.instanceDispatcher] instanceof _instanceDispatcher.Dispatcher === false) {
+                if (instance[_symbols.Symbols.instanceDispatcher] === undefined) {
                     instance[_symbols.Symbols.instanceDispatcher] = new _instanceDispatcher.Dispatcher(instance);
                 }
 
@@ -118,7 +146,7 @@ var LifecycleManager = (function () {
             }
 
             if (instance[_symbols.Symbols.instanceDispatcher] !== undefined) {
-                LifecycleManager.interceptInstanceDeactivator(instance);
+                LifecycleManager.interceptInstanceDeactivators(instance);
             }
 
             return instance;

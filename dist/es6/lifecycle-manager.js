@@ -5,34 +5,59 @@ import {FluxDispatcher} from './flux-dispatcher';
 import {Metadata} from './metadata';
 import {Symbols} from './symbols';
 import Promise from 'bluebird';
+import {activationStrategy} from 'aurelia-router';
 
 export class LifecycleManager {
 
-    static interceptInstanceDeactivator(instance) {
+    static interceptInstanceDeactivators(instance) {
         if(instance[Symbols.deactivators] === true) {
           return;
         }
 
-        for(let deactivator of ['deactivate', 'detached']) {
-          if(deactivator in instance && instance[Symbols.instanceDispatcher] !== undefined) {
-              var deactivateImpl = instance[deactivator];
-              instance[deactivator] = (...args) => {
-                  FluxDispatcher.instance.unregisterInstanceDispatcher(instance[Symbols.instanceDispatcher]);
-                  deactivateImpl.apply(instance, args);
-              };
-          } else {
-              instance[deactivator] = () => {
-                  FluxDispatcher.instance.unregisterInstanceDispatcher(instance[Symbols.instanceDispatcher]);
-              };
-          }
-        }
+        LifecycleManager.interceptInstanceDeactivate(instance);
+        LifecycleManager.interceptInstanceDetached(instance);
 
         instance[Symbols.deactivators] = true;
     }
 
+    static interceptInstanceDeactivate(instance) {
+
+      function _unregister() {
+        if(FluxDispatcher.instance.strategy !== activationStrategy.invokeLifecycle) {
+          FluxDispatcher.instance.unregisterInstanceDispatcher(instance[Symbols.instanceDispatcher]);
+        }
+      }
+
+      if(instance.deactivate !== undefined && instance[Symbols.instanceDispatcher] !== undefined) {
+          var deactivateImpl = instance.deactivate;
+          instance.deactivate = function(...args) {
+              _unregister();
+              deactivateImpl.apply(instance, args);
+          };
+      } else {
+          instance.deactivate = function() {
+              _unregister();
+          };
+      }
+    }
+
+    static interceptInstanceDetached(instance) {
+      if(instance.detached !== undefined && instance[Symbols.instanceDispatcher] !== undefined) {
+          var deactivateImpl = instance.detached;
+          instance.detached = function(...args) {
+              FluxDispatcher.instance.unregisterInstanceDispatcher(instance[Symbols.instanceDispatcher]);
+              deactivateImpl.apply(instance, args);
+          };
+      } else {
+          instance.detached = function() {
+              FluxDispatcher.instance.unregisterInstanceDispatcher(instance[Symbols.instanceDispatcher]);
+          };
+      }
+    }
+
     static interceptHtmlBehaviorResource() {
       if(HtmlBehaviorResource === undefined || typeof HtmlBehaviorResource.prototype.analyze !== 'function') {
-        throw new Error('Unsupported version of ClassActivator');
+        throw new Error('Unsupported version of HtmlBehaviorResource');
       }
 
       var analyzeImpl = HtmlBehaviorResource.prototype.analyze;
@@ -78,7 +103,7 @@ export class LifecycleManager {
             }
 
             if(Metadata.exists(Object.getPrototypeOf(instance))) {
-                if(instance[Symbols.instanceDispatcher] === undefined || instance[Symbols.instanceDispatcher] instanceof Dispatcher === false) {
+                if(instance[Symbols.instanceDispatcher] === undefined) {
                     instance[Symbols.instanceDispatcher] = new Dispatcher(instance);
                 }
 
@@ -86,7 +111,7 @@ export class LifecycleManager {
             }
 
             if(instance[Symbols.instanceDispatcher] !== undefined) {
-                LifecycleManager.interceptInstanceDeactivator(instance);
+                LifecycleManager.interceptInstanceDeactivators(instance);
             }
 
             return instance;

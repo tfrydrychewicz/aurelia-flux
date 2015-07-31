@@ -5,6 +5,8 @@ exports.configure = configure;
 
 var _lifecycleManager = require('./lifecycle-manager');
 
+var _router = require('./router');
+
 var _instanceDispatcher = require('./instance-dispatcher');
 
 exports.Dispatcher = _instanceDispatcher.Dispatcher;
@@ -18,6 +20,7 @@ var _decoratorsWaitFor = require('./decorators/waitFor');
 exports.waitFor = _decoratorsWaitFor.waitFor;
 
 function configure(aurelia, configCallback) {
-  _lifecycleManager.LifecycleManager.interceptClassActivator();
-  _lifecycleManager.LifecycleManager.interceptHtmlBehaviorResource();
+    _lifecycleManager.LifecycleManager.interceptClassActivator();
+    _lifecycleManager.LifecycleManager.interceptHtmlBehaviorResource();
+    _router.RouterManager.AddFluxPipelineStep(aurelia);
 }
