@@ -1,3 +1,13 @@
+### 0.1.6 (2015-08-04)
+
+#### Bug Fixes
+
+* **instance-dispatcher:** handle will now properly return release() function ([20936f9f](https://github.com/tfrydrychewicz/aurelia-flux/commit/20936f9f400b3e457a9a88c146e0741bc9091041), closes [#7](https://github.com/tfrydrychewicz/aurelia-flux/issues/7))
+
+#### Features
+
+* **typescript-type-definitions:** Added babel-dts-generator generator ([e8edfc43](https://github.com/tfrydrychewicz/aurelia-flux/commit/e8edfc43fb7f4bc73ff47d4b7014994caed132d6), closes [#5](https://github.com/tfrydrychewicz/aurelia-flux/issues/5))
+
 ### 0.1.5 (2015-07-31)
 
 #### Features
