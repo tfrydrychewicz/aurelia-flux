@@ -29,10 +29,6 @@ var Dispatcher = (function () {
     function Dispatcher(instance) {
         _classCallCheck(this, Dispatcher);
 
-        if (instance === undefined) {
-            throw new Error('Dispatcher constructor requires an instance');
-        }
-
         this.instance = instance;
         this.handlers = new Set();
 
@@ -122,9 +118,17 @@ var DispatcherProxy = (function () {
     DispatcherProxy.prototype.handle = function handle(patterns, handler) {
         var _this5 = this;
 
+        var def = _bluebird2['default'].defer();
+
         this.inititalize.then(function () {
-            _this5.instance[_symbols.Symbols.instanceDispatcher].handle(patterns, handler);
+            def.resolve(_this5.instance[_symbols.Symbols.instanceDispatcher].handle(patterns, handler));
         });
+
+        return function () {
+            def.promise.then(function (unregister) {
+                return unregister();
+            });
+        };
     };
 
     DispatcherProxy.prototype.waitFor = function waitFor(types, handler) {

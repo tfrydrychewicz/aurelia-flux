@@ -13,11 +13,7 @@ class Handler {
 
 export class Dispatcher {
 
-    constructor(instance : Object) {
-        if(instance === undefined) {
-            throw new Error('Dispatcher constructor requires an instance');
-        }
-        
+    constructor(instance : Object) {              
         this.instance = instance;
         this.handlers = new Set();
 
@@ -112,9 +108,15 @@ export class DispatcherProxy {
 
 
     handle(patterns, handler) {
-        this.inititalize.then(() => {
-            this.instance[Symbols.instanceDispatcher].handle(patterns, handler);
-        });
+        var def = Promise.defer();
+        
+        this.inititalize.then(() => {            
+            def.resolve(this.instance[Symbols.instanceDispatcher].handle(patterns, handler));
+        });                
+        
+        return function() {
+            def.promise.then((unregister) => unregister());
+        }
     }
 
     waitFor(types, handler) {

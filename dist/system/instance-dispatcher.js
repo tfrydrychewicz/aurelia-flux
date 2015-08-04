@@ -29,10 +29,6 @@ System.register(['./metadata', './utils', './flux-dispatcher', 'bluebird', './sy
                 function Dispatcher(instance) {
                     _classCallCheck(this, Dispatcher);
 
-                    if (instance === undefined) {
-                        throw new Error('Dispatcher constructor requires an instance');
-                    }
-
                     this.instance = instance;
                     this.handlers = new Set();
 
@@ -122,9 +118,17 @@ System.register(['./metadata', './utils', './flux-dispatcher', 'bluebird', './sy
                 DispatcherProxy.prototype.handle = function handle(patterns, handler) {
                     var _this5 = this;
 
+                    var def = Promise.defer();
+
                     this.inititalize.then(function () {
-                        _this5.instance[Symbols.instanceDispatcher].handle(patterns, handler);
+                        def.resolve(_this5.instance[Symbols.instanceDispatcher].handle(patterns, handler));
                     });
+
+                    return function () {
+                        def.promise.then(function (unregister) {
+                            return unregister();
+                        });
+                    };
                 };
 
                 DispatcherProxy.prototype.waitFor = function waitFor(types, handler) {
