@@ -13,15 +13,27 @@ class Handler {
 
 export class Dispatcher {
 
-    constructor(instance) {
+    constructor(instance : Object) {
+        if(instance === undefined) {
+            throw new Error('Dispatcher constructor requires an instance');
+        }
+        
         this.instance = instance;
         this.handlers = new Set();
 
         FluxDispatcher.instance.registerInstanceDispatcher(this);
     }
 
-    handle(patterns, handlerImpl) {
-        var handler = new Handler(Utils.patternsToRegex(patterns), handlerImpl)
+    /**
+     * Registers new handler function for given action patterns
+     *
+     * @method handle
+     * @param {String|String[]} patterns
+     * @param {(action:String, ...payload : any[]) => any} callback
+     * @return {() => void} - unregistering function
+     */
+    handle(patterns : String|String[], callback : ((action : String, ...payload : any[]) => any)) : (() => void)  {
+        var handler = new Handler(Utils.patternsToRegex(patterns), callback)
         this.handlers.add(handler);
 
         return () => {
@@ -29,28 +41,46 @@ export class Dispatcher {
         };
     }
 
-    waitFor(types, handler) {
+    /**
+     * Registers a method that will be invoked when all
+     * given types finish dispatching
+     * 
+     * @method waitFor
+     * @param {String|String[]} types
+     * @param {(() => any)} handler
+     * @return void
+     */
+    waitFor(types : String|String[], handler : (() => any)) : void {                                            
         FluxDispatcher.instance.waitFor(types, handler);
     }
 
-    dispatch(event, payload) {
-        FluxDispatcher.instance.dispatch(event, payload);
+    /**
+     * Dispatches an action alond with all passed
+     * parameters (paylod)
+     * 
+     * @method dispatch
+     * @param {String} action
+     * @param {any[]} ...payload
+     * @return void 
+     */
+    dispatch(action : String, ...payload:any[]) : void {
+        FluxDispatcher.instance.dispatch(action, payload);
     }
 
-    dispatchOwn(event, payload) {
+    dispatchOwn(action : String, payload:any[]) {
 
         var promises = [];
 
         this.handlers.forEach((handler) => {
-            if(handler.regexp.test(event)) {
-                promises.push(Promise.resolve(handler.function.apply(this.instance, [event].concat(payload))));
+            if(handler.regexp.test(action)) {
+                promises.push(Promise.resolve(handler.function.apply(this.instance, [action].concat(payload))));
             }
         });
 
         return Promise.settle(promises);
     }
 
-    registerMetadata() {
+    registerMetadata() : void {
         var metadata = Metadata.getOrCreateMetadata(Object.getPrototypeOf(this.instance));
 
         metadata.awaiters.forEach((types, methodName) => {
@@ -93,9 +123,10 @@ export class DispatcherProxy {
         });
     }
 
-    dispatch(event, ...payload) {
+    dispatch(action, ...payload) {
         this.inititalize.then(() => {
-            this.instance[Symbols.instanceDispatcher].dispatch(event, payload);
+            this.instance[Symbols.instanceDispatcher].dispatch
+                .apply(this.instance[Symbols.instanceDispatcher],[action].concat(payload));
         });
     }
 }

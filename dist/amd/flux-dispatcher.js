@@ -1,4 +1,4 @@
-define(['exports', 'bluebird'], function (exports, _bluebird) {
+define(['exports', 'bluebird', './instance-dispatcher'], function (exports, _bluebird, _instanceDispatcher) {
     'use strict';
 
     exports.__esModule = true;
@@ -65,15 +65,15 @@ define(['exports', 'bluebird'], function (exports, _bluebird) {
             }
         };
 
-        FluxDispatcher.prototype.dispatch = function dispatch(event, payload) {
-            this.$dispatch(event, payload, false);
+        FluxDispatcher.prototype.dispatch = function dispatch(action, payload) {
+            this.$dispatch(action, payload, false);
         };
 
-        FluxDispatcher.prototype.$dispatch = function $dispatch(event, payload, fromQueue) {
+        FluxDispatcher.prototype.$dispatch = function $dispatch(action, payload, fromQueue) {
             var _this = this;
 
             if (this.isDispatching && fromQueue === false) {
-                this.queue.push([event, payload]);
+                this.queue.push([action, payload]);
                 return;
             }
 
@@ -86,7 +86,7 @@ define(['exports', 'bluebird'], function (exports, _bluebird) {
                 var promises = [];
 
                 dispatchers.forEach(function (dispatcher) {
-                    promises.push(dispatcher.dispatchOwn.apply(dispatcher, [event, payload]));
+                    promises.push(dispatcher.dispatchOwn.apply(dispatcher, [action, payload]));
                 });
 
                 _Promise['default'].settle(promises).then(function () {
@@ -98,7 +98,7 @@ define(['exports', 'bluebird'], function (exports, _bluebird) {
                 if (_this.instanceDispatchers.has(type) === false) {
 
                     var _name = type !== undefined && type.constructor !== undefined && type.constructor.name !== undefined ? type.constructor.name : type.toString();
-                    console.warn('You are waiting for a type \'' + _name + '\' that didn\'t handle event \'' + event + '\'. ' + _name + ' promise has been resolved automatically.');
+                    console.warn('You are waiting for a type \'' + _name + '\' that didn\'t handle event \'' + action + '\'. ' + _name + ' promise has been resolved automatically.');
 
                     promise.resolve();
                 }

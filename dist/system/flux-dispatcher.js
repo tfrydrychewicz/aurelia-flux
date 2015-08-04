@@ -1,7 +1,7 @@
-System.register(['bluebird'], function (_export) {
+System.register(['bluebird', './instance-dispatcher'], function (_export) {
     'use strict';
 
-    var Promise, FluxDispatcher;
+    var Promise, Dispatcher, FluxDispatcher;
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -10,6 +10,8 @@ System.register(['bluebird'], function (_export) {
     return {
         setters: [function (_bluebird) {
             Promise = _bluebird['default'];
+        }, function (_instanceDispatcher) {
+            Dispatcher = _instanceDispatcher.Dispatcher;
         }],
         execute: function () {
             FluxDispatcher = (function () {
@@ -66,15 +68,15 @@ System.register(['bluebird'], function (_export) {
                     }
                 };
 
-                FluxDispatcher.prototype.dispatch = function dispatch(event, payload) {
-                    this.$dispatch(event, payload, false);
+                FluxDispatcher.prototype.dispatch = function dispatch(action, payload) {
+                    this.$dispatch(action, payload, false);
                 };
 
-                FluxDispatcher.prototype.$dispatch = function $dispatch(event, payload, fromQueue) {
+                FluxDispatcher.prototype.$dispatch = function $dispatch(action, payload, fromQueue) {
                     var _this = this;
 
                     if (this.isDispatching && fromQueue === false) {
-                        this.queue.push([event, payload]);
+                        this.queue.push([action, payload]);
                         return;
                     }
 
@@ -87,7 +89,7 @@ System.register(['bluebird'], function (_export) {
                         var promises = [];
 
                         dispatchers.forEach(function (dispatcher) {
-                            promises.push(dispatcher.dispatchOwn.apply(dispatcher, [event, payload]));
+                            promises.push(dispatcher.dispatchOwn.apply(dispatcher, [action, payload]));
                         });
 
                         Promise.settle(promises).then(function () {
@@ -99,7 +101,7 @@ System.register(['bluebird'], function (_export) {
                         if (_this.instanceDispatchers.has(type) === false) {
 
                             var _name = type !== undefined && type.constructor !== undefined && type.constructor.name !== undefined ? type.constructor.name : type.toString();
-                            console.warn('You are waiting for a type \'' + _name + '\' that didn\'t handle event \'' + event + '\'. ' + _name + ' promise has been resolved automatically.');
+                            console.warn('You are waiting for a type \'' + _name + '\' that didn\'t handle event \'' + action + '\'. ' + _name + ' promise has been resolved automatically.');
 
                             promise.resolve();
                         }

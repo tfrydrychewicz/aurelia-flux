@@ -29,16 +29,20 @@ var Dispatcher = (function () {
     function Dispatcher(instance) {
         _classCallCheck(this, Dispatcher);
 
+        if (instance === undefined) {
+            throw new Error('Dispatcher constructor requires an instance');
+        }
+
         this.instance = instance;
         this.handlers = new Set();
 
         _fluxDispatcher.FluxDispatcher.instance.registerInstanceDispatcher(this);
     }
 
-    Dispatcher.prototype.handle = function handle(patterns, handlerImpl) {
+    Dispatcher.prototype.handle = function handle(patterns, callback) {
         var _this = this;
 
-        var handler = new Handler(_utils.Utils.patternsToRegex(patterns), handlerImpl);
+        var handler = new Handler(_utils.Utils.patternsToRegex(patterns), callback);
         this.handlers.add(handler);
 
         return function () {
@@ -50,18 +54,22 @@ var Dispatcher = (function () {
         _fluxDispatcher.FluxDispatcher.instance.waitFor(types, handler);
     };
 
-    Dispatcher.prototype.dispatch = function dispatch(event, payload) {
-        _fluxDispatcher.FluxDispatcher.instance.dispatch(event, payload);
+    Dispatcher.prototype.dispatch = function dispatch(action) {
+        for (var _len = arguments.length, payload = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+            payload[_key - 1] = arguments[_key];
+        }
+
+        _fluxDispatcher.FluxDispatcher.instance.dispatch(action, payload);
     };
 
-    Dispatcher.prototype.dispatchOwn = function dispatchOwn(event, payload) {
+    Dispatcher.prototype.dispatchOwn = function dispatchOwn(action, payload) {
         var _this2 = this;
 
         var promises = [];
 
         this.handlers.forEach(function (handler) {
-            if (handler.regexp.test(event)) {
-                promises.push(_bluebird2['default'].resolve(handler['function'].apply(_this2.instance, [event].concat(payload))));
+            if (handler.regexp.test(action)) {
+                promises.push(_bluebird2['default'].resolve(handler['function'].apply(_this2.instance, [action].concat(payload))));
             }
         });
 
@@ -77,8 +85,8 @@ var Dispatcher = (function () {
             if (_this3.instance[methodName] !== undefined && typeof _this3.instance[methodName] === 'function') {
                 var methodImpl = _this3.instance[methodName];
                 _this3.instance[methodName] = function () {
-                    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-                        args[_key] = arguments[_key];
+                    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                        args[_key2] = arguments[_key2];
                     }
 
                     return _fluxDispatcher.FluxDispatcher.instance.waitFor(types, function () {
@@ -127,15 +135,15 @@ var DispatcherProxy = (function () {
         });
     };
 
-    DispatcherProxy.prototype.dispatch = function dispatch(event) {
+    DispatcherProxy.prototype.dispatch = function dispatch(action) {
         var _this7 = this;
 
-        for (var _len2 = arguments.length, payload = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-            payload[_key2 - 1] = arguments[_key2];
+        for (var _len3 = arguments.length, payload = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+            payload[_key3 - 1] = arguments[_key3];
         }
 
         this.inititalize.then(function () {
-            _this7.instance[_symbols.Symbols.instanceDispatcher].dispatch(event, payload);
+            _this7.instance[_symbols.Symbols.instanceDispatcher].dispatch.apply(_this7.instance[_symbols.Symbols.instanceDispatcher], [action].concat(payload));
         });
     };
 

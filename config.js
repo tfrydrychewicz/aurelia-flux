@@ -16,18 +16,18 @@ System.config({
 
 System.config({
   "map": {
-    "aurelia-binding": "github:aurelia/binding@0.8.2",
+    "aurelia-binding": "github:aurelia/binding@0.8.4",
     "aurelia-dependency-injection": "github:aurelia/dependency-injection@0.9.1",
     "aurelia-router": "github:aurelia/router@0.10.3",
-    "aurelia-templating": "github:aurelia/templating@0.13.11",
+    "aurelia-templating": "github:aurelia/templating@0.13.15",
     "babel": "npm:babel-core@5.5.2",
     "babel-runtime": "npm:babel-runtime@5.5.2",
-    "bluebird": "npm:bluebird@2.9.27",
+    "bluebird": "npm:bluebird@2.9.34",
     "core-js": "npm:core-js@0.9.18",
-    "github:aurelia/binding@0.8.2": {
+    "github:aurelia/binding@0.8.4": {
       "aurelia-dependency-injection": "github:aurelia/dependency-injection@0.9.1",
       "aurelia-metadata": "github:aurelia/metadata@0.7.1",
-      "aurelia-task-queue": "github:aurelia/task-queue@0.6.0",
+      "aurelia-task-queue": "github:aurelia/task-queue@0.6.1",
       "core-js": "npm:core-js@0.9.18"
     },
     "github:aurelia/dependency-injection@0.9.1": {
@@ -38,7 +38,7 @@ System.config({
     "github:aurelia/event-aggregator@0.6.2": {
       "aurelia-logging": "github:aurelia/logging@0.6.2"
     },
-    "github:aurelia/loader@0.8.2": {
+    "github:aurelia/loader@0.8.3": {
       "aurelia-html-template-element": "github:aurelia/html-template-element@0.2.0",
       "aurelia-metadata": "github:aurelia/metadata@0.7.1",
       "aurelia-path": "github:aurelia/path@0.8.1",
@@ -60,19 +60,16 @@ System.config({
       "aurelia-route-recognizer": "github:aurelia/route-recognizer@0.6.1",
       "core-js": "npm:core-js@0.9.18"
     },
-    "github:aurelia/templating@0.13.11": {
-      "aurelia-binding": "github:aurelia/binding@0.8.2",
+    "github:aurelia/templating@0.13.15": {
+      "aurelia-binding": "github:aurelia/binding@0.8.4",
       "aurelia-dependency-injection": "github:aurelia/dependency-injection@0.9.1",
       "aurelia-html-template-element": "github:aurelia/html-template-element@0.2.0",
-      "aurelia-loader": "github:aurelia/loader@0.8.2",
+      "aurelia-loader": "github:aurelia/loader@0.8.3",
       "aurelia-logging": "github:aurelia/logging@0.6.2",
       "aurelia-metadata": "github:aurelia/metadata@0.7.1",
       "aurelia-path": "github:aurelia/path@0.8.1",
-      "aurelia-task-queue": "github:aurelia/task-queue@0.6.0",
+      "aurelia-task-queue": "github:aurelia/task-queue@0.6.1",
       "core-js": "npm:core-js@0.9.18"
-    },
-    "github:jspm/nodelibs-events@0.1.1": {
-      "events": "npm:events@1.0.2"
     },
     "github:jspm/nodelibs-process@0.1.1": {
       "process": "npm:process@0.10.1"
@@ -80,8 +77,7 @@ System.config({
     "npm:babel-runtime@5.5.2": {
       "process": "github:jspm/nodelibs-process@0.1.1"
     },
-    "npm:bluebird@2.9.27": {
-      "events": "github:jspm/nodelibs-events@0.1.1",
+    "npm:bluebird@2.9.34": {
       "process": "github:jspm/nodelibs-process@0.1.1"
     },
     "npm:core-js@0.9.18": {

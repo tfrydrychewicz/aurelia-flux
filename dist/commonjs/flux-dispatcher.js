@@ -12,6 +12,8 @@ var _bluebird = require('bluebird');
 
 var _bluebird2 = _interopRequireDefault(_bluebird);
 
+var _instanceDispatcher = require('./instance-dispatcher');
+
 var FluxDispatcher = (function () {
     function FluxDispatcher() {
         _classCallCheck(this, FluxDispatcher);
@@ -66,15 +68,15 @@ var FluxDispatcher = (function () {
         }
     };
 
-    FluxDispatcher.prototype.dispatch = function dispatch(event, payload) {
-        this.$dispatch(event, payload, false);
+    FluxDispatcher.prototype.dispatch = function dispatch(action, payload) {
+        this.$dispatch(action, payload, false);
     };
 
-    FluxDispatcher.prototype.$dispatch = function $dispatch(event, payload, fromQueue) {
+    FluxDispatcher.prototype.$dispatch = function $dispatch(action, payload, fromQueue) {
         var _this = this;
 
         if (this.isDispatching && fromQueue === false) {
-            this.queue.push([event, payload]);
+            this.queue.push([action, payload]);
             return;
         }
 
@@ -87,7 +89,7 @@ var FluxDispatcher = (function () {
             var promises = [];
 
             dispatchers.forEach(function (dispatcher) {
-                promises.push(dispatcher.dispatchOwn.apply(dispatcher, [event, payload]));
+                promises.push(dispatcher.dispatchOwn.apply(dispatcher, [action, payload]));
             });
 
             _bluebird2['default'].settle(promises).then(function () {
@@ -99,7 +101,7 @@ var FluxDispatcher = (function () {
             if (_this.instanceDispatchers.has(type) === false) {
 
                 var _name = type !== undefined && type.constructor !== undefined && type.constructor.name !== undefined ? type.constructor.name : type.toString();
-                console.warn('You are waiting for a type \'' + _name + '\' that didn\'t handle event \'' + event + '\'. ' + _name + ' promise has been resolved automatically.');
+                console.warn('You are waiting for a type \'' + _name + '\' that didn\'t handle event \'' + action + '\'. ' + _name + ' promise has been resolved automatically.');
 
                 promise.resolve();
             }

@@ -1,4 +1,5 @@
 import Promise from 'bluebird';
+import {Dispatcher} from './instance-dispatcher';
 
 export class FluxDispatcher {
     static instance = new FluxDispatcher();
@@ -10,7 +11,7 @@ export class FluxDispatcher {
         this.typesPromises = new Map();
     }
 
-    getOrCreateTypeDispatchers(type) {
+    getOrCreateTypeDispatchers(type : Object) : Set {
         if(this.instanceDispatchers.has(type) === false) {
             this.instanceDispatchers.set(type, new Set());
         }
@@ -18,7 +19,7 @@ export class FluxDispatcher {
         return this.instanceDispatchers.get(type);
     }
 
-    getOrCreateTypePromises(type) {
+    getOrCreateTypePromises(type : Object) {
         if(this.typesPromises.has(type) === false) {
             this.typesPromises.set(type, Promise.defer());
         }
@@ -26,7 +27,7 @@ export class FluxDispatcher {
         return this.typesPromises.get(type);
     }
 
-    registerInstanceDispatcher(dispatcher) {
+    registerInstanceDispatcher(dispatcher : Dispatcher) {
         if(dispatcher === undefined || dispatcher.instance === undefined) {
             return;
         }
@@ -36,7 +37,7 @@ export class FluxDispatcher {
         typeDispatchers.add(dispatcher);
     }
 
-    unregisterInstanceDispatcher(dispatcher) {
+    unregisterInstanceDispatcher(dispatcher : Dispatcher) {
         if(dispatcher === undefined || dispatcher.instance === undefined) {
             return;
         }
@@ -54,14 +55,14 @@ export class FluxDispatcher {
         }
     }
 
-    dispatch(event, payload) {
-        this.$dispatch(event, payload, false);
+    dispatch(action : String, payload : any) {
+        this.$dispatch(action, payload, false);
     }
 
-    $dispatch(event, payload, fromQueue) {
+    $dispatch(action : String, payload : any, fromQueue : boolean) {
 
         if(this.isDispatching && fromQueue === false) {
-            this.queue.push([event, payload]);
+            this.queue.push([action, payload]);
             return;
         }
 
@@ -74,7 +75,7 @@ export class FluxDispatcher {
             var promises = [];
 
             dispatchers.forEach((dispatcher) => {
-               promises.push(dispatcher.dispatchOwn.apply(dispatcher, [event, payload]));
+               promises.push(dispatcher.dispatchOwn.apply(dispatcher, [action, payload]));
             });
 
             Promise.settle(promises).then(() => {
@@ -82,12 +83,11 @@ export class FluxDispatcher {
             });
         });
 
-
         this.typesPromises.forEach((promise, type) => {
             if(this.instanceDispatchers.has(type) === false) {
 
                 let name = (type !== undefined && type.constructor !== undefined && type.constructor.name !== undefined) ? type.constructor.name : type.toString();
-                console.warn(`You are waiting for a type '${name}' that didn't handle event '${event}'. ${name} promise has been resolved automatically.`);
+                console.warn(`You are waiting for a type '${name}' that didn't handle event '${action}'. ${name} promise has been resolved automatically.`);
 
                 promise.resolve();
             }
@@ -107,7 +107,7 @@ export class FluxDispatcher {
         });
     }
 
-    waitFor(types, handler) {
+    waitFor(types : String|String[], handler: (() => any)) {
         if(Array.isArray(types) === false) {
             types = [types];
         }
