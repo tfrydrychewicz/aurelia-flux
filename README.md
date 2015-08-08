@@ -1,5 +1,6 @@
 # aurelia-flux
 [![Join the chat at https://gitter.im/aurelia/discuss](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/aurelia/discuss?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Circle CI](https://circleci.com/gh/tfrydrychewicz/aurelia-flux.svg?&style=shield&circle-token=072ff96bc8a1c1b3bc23cd72c0c39639e5531bdb)](https://circleci.com/gh/tfrydrychewicz/aurelia-flux)
 
 A Flux plugin for [Aurelia](http://www.aurelia.io/) that supports Promises.
 
