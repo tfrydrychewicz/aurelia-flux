@@ -28,10 +28,10 @@
       "lib": "dist/amd"
     },
     "dependencies": {
-      "aurelia-binding": "github:aurelia/binding@^0.8.2",
-      "aurelia-dependency-injection": "github:aurelia/dependency-injection@^0.9.0",
-      "aurelia-router": "github:aurelia/router@^0.10.3",
-      "aurelia-templating": "github:aurelia/templating@^0.13.11",
+      "aurelia-binding": "github:aurelia/binding@^0.8.5",
+      "aurelia-dependency-injection": "github:aurelia/dependency-injection@^0.9.1",
+      "aurelia-router": "github:aurelia/router@^0.10.4",
+      "aurelia-templating": "github:aurelia/templating@^0.13.16",
       "bluebird": "npm:bluebird@^2.9.27",
       "core-js": "npm:core-js@^0.9.18"
     },

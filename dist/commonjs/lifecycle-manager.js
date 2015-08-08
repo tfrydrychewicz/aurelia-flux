@@ -48,7 +48,7 @@ var LifecycleManager = (function () {
             }
         }
 
-        if (instance.deactivate !== undefined && instance[_symbols.Symbols.instanceDispatcher] !== undefined) {
+        if (instance.deactivate !== undefined) {
             var deactivateImpl = instance.deactivate;
             instance.deactivate = function () {
                 for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
@@ -66,7 +66,7 @@ var LifecycleManager = (function () {
     };
 
     LifecycleManager.interceptInstanceDetached = function interceptInstanceDetached(instance) {
-        if (instance.detached !== undefined && instance[_symbols.Symbols.instanceDispatcher] !== undefined) {
+        if (instance.detached !== undefined) {
             var deactivateImpl = instance.detached;
             instance.detached = function () {
                 for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
@@ -116,16 +116,16 @@ var LifecycleManager = (function () {
                 invokeArgs[_key4] = arguments[_key4];
             }
 
-            var type = invokeArgs[0];
-            var args = invokeArgs[1];
-            var instance;
-            var dispatcher = args.find(function (item) {
-                return item instanceof _instanceDispatcher.Dispatcher;
-            });
+            var args = invokeArgs[1],
+                instance;
 
             if (Array.isArray(args) === false) {
                 throw new Error('Unsupported version of ClassActivator');
             }
+
+            var dispatcher = args.find(function (item) {
+                return item instanceof _instanceDispatcher.Dispatcher;
+            });
 
             if (dispatcher) {
                 var instancePromise = _bluebird2['default'].defer();
@@ -141,7 +141,6 @@ var LifecycleManager = (function () {
                 if (instance[_symbols.Symbols.instanceDispatcher] === undefined) {
                     instance[_symbols.Symbols.instanceDispatcher] = new _instanceDispatcher.Dispatcher(instance);
                 }
-
                 instance[_symbols.Symbols.instanceDispatcher].registerMetadata();
             }
 

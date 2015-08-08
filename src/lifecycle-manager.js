@@ -28,10 +28,10 @@ export class LifecycleManager {
         }
       }
 
-      if(instance.deactivate !== undefined && instance[Symbols.instanceDispatcher] !== undefined) {
+      if(instance.deactivate !== undefined) {
           var deactivateImpl = instance.deactivate;
           instance.deactivate = function(...args) {
-              _unregister();
+              _unregister();              
               deactivateImpl.apply(instance, args);
           };
       } else {
@@ -42,7 +42,7 @@ export class LifecycleManager {
     }
 
     static interceptInstanceDetached(instance) {
-      if(instance.detached !== undefined && instance[Symbols.instanceDispatcher] !== undefined) {
+      if(instance.detached !== undefined) {
           var deactivateImpl = instance.detached;
           instance.detached = function(...args) {
               FluxDispatcher.instance.unregisterInstanceDispatcher(instance[Symbols.instanceDispatcher]);
@@ -63,7 +63,7 @@ export class LifecycleManager {
       var analyzeImpl = HtmlBehaviorResource.prototype.analyze;
 
       HtmlBehaviorResource.prototype.analyze = function(...args) {
-        let target = args[1];
+        let target = args[1];        
         if(    target
             && target.prototype
             && target.prototype[Symbols.metadata]
@@ -84,29 +84,29 @@ export class LifecycleManager {
 
         var invokeImpl = ClassActivator.instance.invoke;
         ClassActivator.instance.invoke = function(...invokeArgs) {
-            var [type, args] = invokeArgs,
-                instance,
-                dispatcher = args.find((item) => { return item instanceof Dispatcher; });
+            var args = invokeArgs[1],
+                instance;                
 
             if(Array.isArray(args) === false) {
                 throw new Error('Unsupported version of ClassActivator');
             }
-
+            
+            var dispatcher = args.find((item) => { return item instanceof Dispatcher; });
+            
             if(dispatcher) {
                 var instancePromise = Promise.defer();
                 args[args.indexOf(dispatcher)] = new DispatcherProxy(instancePromise.promise);
-                instance = invokeImpl.apply(this, invokeArgs);
+                instance = invokeImpl.apply(this, invokeArgs);                
                 instance[Symbols.instanceDispatcher] = new Dispatcher(instance);
                 instancePromise.resolve(instance);
             } else {
                 instance = invokeImpl.apply(this, invokeArgs);
             }
-
+            
             if(Metadata.exists(Object.getPrototypeOf(instance))) {
                 if(instance[Symbols.instanceDispatcher] === undefined) {
                     instance[Symbols.instanceDispatcher] = new Dispatcher(instance);
-                }
-
+                }                
                 instance[Symbols.instanceDispatcher].registerMetadata();
             }
 
