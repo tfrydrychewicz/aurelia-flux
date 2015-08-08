@@ -19,7 +19,7 @@
     "url": "https://github.com/tfrydrychewicz/aurelia-flux"
   },
   "scripts": {
-    "test": "./node_modules/.bin/karma start --single-run --browsers Chrome"
+    "test": "./node_modules/.bin/karma start --single-run --browsers Firefox"
   },
   "jspm": {
     "main": "index",
