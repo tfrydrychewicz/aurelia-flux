@@ -1,6 +1,5 @@
 # aurelia-flux
 [![Join the chat at https://gitter.im/aurelia/discuss](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/aurelia/discuss?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Travis CI](https://travis-ci.org/tfrydrychewicz/aurelia-flux.svg)](https://travis-ci.org/tfrydrychewicz/aurelia-flux)
 
 A Flux plugin for [Aurelia](http://www.aurelia.io/) that supports Promises.
 
@@ -57,6 +56,10 @@ export class Welcome {
 	}
 }
 ```
+## Articles
+
+* [Creating Reactive, Loosely Coupled Apps with Aurelia and Flux - Episode 1](http://blog.durandal.io/2015/07/23/creating-reactive-loosely-coupled-apps-with-aurelia-and-flux-episode-1/)
+* [Creating Reactive, Loosely Coupled Apps with Aurelia and Flux - Episode 2](http://blog.durandal.io/2015/08/07/creating-reactive-loosely-coupled-apps-with-aurelia-and-flux-episode-2/)
 
 ## Dependencies
 
