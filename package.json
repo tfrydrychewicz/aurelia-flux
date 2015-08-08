@@ -19,7 +19,7 @@
     "url": "https://github.com/tfrydrychewicz/aurelia-flux"
   },
   "scripts": {
-    "test": "./node_modules/.bin/karma start --single-run --browsers PhantomJS"
+    "test": "./node_modules/.bin/karma start --single-run --browsers Firefox"
   },
   "jspm": {
     "main": "index",
@@ -58,12 +58,12 @@
     "jshint-stylish": "^1.0.0",
     "jspm": "^0.16.0-beta.3",
     "karma": "^0.12.28",
-    "karma-babel-preprocessor": "^5.0.1",
+    "karma-babel-preprocessor": "^5.2.1",
     "karma-chrome-launcher": "^0.1.7",
     "karma-firefox-launcher": "^0.1.6",
     "karma-jasmine": "^0.3.2",
-    "karma-jspm": "^2.0.1-beta.1",
-    "karma-phantomjs-launcher": "^0.2.0",
+    "karma-jspm": "^1.1.4",
+    "karma-phantomjs-launcher": "^0.2.1",
     "karma-phantomjs-shim": "^1.0.0",
     "object.assign": "^1.0.3",
     "phantomjs": "^1.9.17",
