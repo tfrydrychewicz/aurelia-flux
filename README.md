@@ -68,6 +68,7 @@ export class Welcome {
 * [aurelia-dependency-injection](https://github.com/aurelia/dependency-injection)
 * [aurelia-router](https://github.com/aurelia/router)
 * [aurelia-templating](https://github.com/aurelia/templating)
+* [bluebird](https://github.com/petkaantonov/bluebird)
 
 ## Used By
 
