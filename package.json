@@ -1,6 +1,6 @@
 {
   "name": "aurelia-flux",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "A Flux dispatcher plugin for Aurelia.",
   "keywords": [
     "aurelia",
