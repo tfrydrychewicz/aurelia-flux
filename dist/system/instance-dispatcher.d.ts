@@ -10,13 +10,36 @@ declare module 'aurelia-flux' {
   export class Dispatcher {
     constructor(instance: Object);
     
-    
+    /**
+         * Registers new handler function for given action patterns
+         *
+         * @method handle
+         * @param {String|String[]} patterns
+         * @param {(action:String, ...payload : any[]) => any} callback
+         * @return {() => void} - unregistering function
+         */
     handle(patterns: String | String[], callback: ((action: String) => any)): (() => void);
     
-    
+    /**
+         * Registers a method that will be invoked when all
+         * given types finish dispatching
+         * 
+         * @method waitFor
+         * @param {String|String[]} types
+         * @param {(() => any)} handler
+         * @return void
+         */
     waitFor(types: String | String[], handler: (() => any)): void;
     
-    
+    /**
+         * Dispatches an action alond with all passed
+         * parameters (paylod)
+         * 
+         * @method dispatch
+         * @param {String} action
+         * @param {any[]} ...payload
+         * @return void 
+         */
     dispatch(action: String, ...payload: any[]): void;
     dispatchOwn(action: String, payload: any[]): any;
     registerMetadata(): void;

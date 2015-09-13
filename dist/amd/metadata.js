@@ -6,13 +6,6 @@ define(['exports', './symbols'], function (exports, _symbols) {
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
     var Metadata = (function () {
-        function Metadata() {
-            _classCallCheck(this, Metadata);
-
-            this.handlers = new Map();
-            this.awaiters = new Map();
-        }
-
         Metadata.getOrCreateMetadata = function getOrCreateMetadata(target) {
             if (target[_symbols.Symbols.metadata] === undefined) {
                 target[_symbols.Symbols.metadata] = new Metadata();
@@ -24,6 +17,13 @@ define(['exports', './symbols'], function (exports, _symbols) {
         Metadata.exists = function exists(target) {
             return target[_symbols.Symbols.metadata] !== undefined && target[_symbols.Symbols.metadata] instanceof Metadata;
         };
+
+        function Metadata() {
+            _classCallCheck(this, Metadata);
+
+            this.handlers = new Map();
+            this.awaiters = new Map();
+        }
 
         return Metadata;
     })();

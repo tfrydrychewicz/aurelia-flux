@@ -7,13 +7,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var _symbols = require('./symbols');
 
 var Metadata = (function () {
-    function Metadata() {
-        _classCallCheck(this, Metadata);
-
-        this.handlers = new Map();
-        this.awaiters = new Map();
-    }
-
     Metadata.getOrCreateMetadata = function getOrCreateMetadata(target) {
         if (target[_symbols.Symbols.metadata] === undefined) {
             target[_symbols.Symbols.metadata] = new Metadata();
@@ -25,6 +18,13 @@ var Metadata = (function () {
     Metadata.exists = function exists(target) {
         return target[_symbols.Symbols.metadata] !== undefined && target[_symbols.Symbols.metadata] instanceof Metadata;
     };
+
+    function Metadata() {
+        _classCallCheck(this, Metadata);
+
+        this.handlers = new Map();
+        this.awaiters = new Map();
+    }
 
     return Metadata;
 })();

@@ -11,13 +11,6 @@ System.register(['./symbols'], function (_export) {
         }],
         execute: function () {
             Metadata = (function () {
-                function Metadata() {
-                    _classCallCheck(this, Metadata);
-
-                    this.handlers = new Map();
-                    this.awaiters = new Map();
-                }
-
                 Metadata.getOrCreateMetadata = function getOrCreateMetadata(target) {
                     if (target[Symbols.metadata] === undefined) {
                         target[Symbols.metadata] = new Metadata();
@@ -29,6 +22,13 @@ System.register(['./symbols'], function (_export) {
                 Metadata.exists = function exists(target) {
                     return target[Symbols.metadata] !== undefined && target[Symbols.metadata] instanceof Metadata;
                 };
+
+                function Metadata() {
+                    _classCallCheck(this, Metadata);
+
+                    this.handlers = new Map();
+                    this.awaiters = new Map();
+                }
 
                 return Metadata;
             })();
