@@ -1,3 +1,7 @@
+### 0.1.7 (2015-09-13)
+
+* Upgraded Aurelia dependencies to early September release
+
 ### 0.1.6 (2015-08-04)
 
 #### Bug Fixes

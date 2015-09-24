@@ -15,6 +15,12 @@ System.register(['bluebird', './instance-dispatcher'], function (_export) {
         }],
         execute: function () {
             FluxDispatcher = (function () {
+                _createClass(FluxDispatcher, null, [{
+                    key: 'instance',
+                    value: new FluxDispatcher(),
+                    enumerable: true
+                }]);
+
                 function FluxDispatcher() {
                     _classCallCheck(this, FluxDispatcher);
 
@@ -146,12 +152,6 @@ System.register(['bluebird', './instance-dispatcher'], function (_export) {
 
                     return def.promise;
                 };
-
-                _createClass(FluxDispatcher, null, [{
-                    key: 'instance',
-                    value: new FluxDispatcher(),
-                    enumerable: true
-                }]);
 
                 return FluxDispatcher;
             })();

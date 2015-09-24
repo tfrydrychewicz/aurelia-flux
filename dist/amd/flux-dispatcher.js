@@ -12,6 +12,12 @@ define(['exports', 'bluebird', './instance-dispatcher'], function (exports, _blu
     var _Promise = _interopRequireDefault(_bluebird);
 
     var FluxDispatcher = (function () {
+        _createClass(FluxDispatcher, null, [{
+            key: 'instance',
+            value: new FluxDispatcher(),
+            enumerable: true
+        }]);
+
         function FluxDispatcher() {
             _classCallCheck(this, FluxDispatcher);
 
@@ -143,12 +149,6 @@ define(['exports', 'bluebird', './instance-dispatcher'], function (exports, _blu
 
             return def.promise;
         };
-
-        _createClass(FluxDispatcher, null, [{
-            key: 'instance',
-            value: new FluxDispatcher(),
-            enumerable: true
-        }]);
 
         return FluxDispatcher;
     })();

@@ -17,7 +17,7 @@ var RouterManager = (function () {
     var router = aurelia.container.get(_aureliaRouter.Router);
     var configuration = new _aureliaRouter.RouterConfiguration();
 
-    configuration.addPipelineStep('modelbind', FluxLifeCycleStep);
+    configuration.addPipelineStep("modelbind", FluxLifeCycleStep);
     router.configure(configuration);
   };
 
